@@ -9,12 +9,36 @@ public class Match {
     In the same way it will have 2 innings-first and second, 1 numOfOvers variable to determine how many overs each
     inning will play and 1 tossWinningTeam variable that will store the toss winning team.
     */
-    private Team a = new Team("India"), b = new Team("Pakistan");
+    private Team a,b;
     private FirstInnings first = new FirstInnings();
     private SecondInnings second = new SecondInnings();
-    private int numOfOvers = 50;
+    private int numOfOvers;
     private Team tossWinningTeam;
 
+    public void setTeamName(String team1, String team2) {
+        a = new Team(team1);
+        b = new Team(team2);
+    }
+
+    public Team getTeamA() {
+        return a;
+    }
+
+    public Team getTeamB() {
+        return b;
+    }
+
+    public void setPlayers(Team t) {
+        Player[] players = new Player[11];
+        StringBuilder s = new StringBuilder();
+        for(int i=0; i < players.length; i++) {
+            s.setLength(0);
+            s.append("Player ").append((i+1));
+            Player p = new Player(s.toString(),i+1,i+1);
+            players[i] = p;
+        }
+        t.setPlayers(players);
+    }
     // toss method is used to simulate toss before actual match starts, it will decide randomly which team won the toss
     // and what they have chosen first. In future functionality of asking the user what they wish to take first can be
     // added.
@@ -30,7 +54,7 @@ public class Match {
         // If "decision" is true, then winning team chooses bat first and if it is false then it chooses bowl first
         boolean decision = r.nextBoolean();
 
-        if(!(tossResult^decision)) {
+        if(tossResult==decision) {
             first.setBattingTeam(a);
             first.setBowlingTeam(b);
             second.setBattingTeam(b);
@@ -45,8 +69,11 @@ public class Match {
 
     // startMatch method is the actual method that will start the match, it will call toss(), first.start(int) and
     // second.start(int)
-    public String startMatch() {
+    public String startMatch(int overs) {
 
+        setPlayers(a);
+        setPlayers(b);
+        numOfOvers = overs;
         // Using System.lineSeparator() for newline so that code will be platform independent.
         String newline = System.lineSeparator();
         // res contains the final result string that startMatch() will return
@@ -65,26 +92,45 @@ public class Match {
         }
 
         int numOfBalls = first.start(numOfOvers);
-        String overs = new String();
-        overs += (numOfBalls/6);
-        if(numOfBalls%6 != 0) overs += "."+(numOfBalls%6);
+        String overString = Integer.toString(numOfBalls/6);
+        //overString += (numOfBalls/6);
+        if(numOfBalls%6 != 0) overString += "."+(numOfBalls%6);
 
         res.append("First Innings Score").append("<br>").append(newline);
         res.append("Team ").append(first.getBattingTeam().getName()).append(" : ").append(first.getBattingTeam()
-                .getRuns()).append("/").append(first.getBattingTeam().getWickets()).append(" (").append(overs)
-                .append(")").append("<br>").append(newline);
+                .getRuns()).append("/").append(first.getBattingTeam().getWickets()).append(" (").append(overString)
+                .append(")").append("<br>").append("<br>").append(newline);
+        res.append("Runs Scored by each Player").append("<br>").append(newline);
+        for(int i=0;i < first.getBattingTeam().getPlayers().length; i++) {
+            res.append(first.getBattingTeam().getPlayer(i).getName()).append(" : ")
+                    .append(first.getBattingTeam().getPlayer(i).getRunsScored());
+            String v = Integer.toString(first.getBattingTeam().getPlayer(i).getBallsPlayed()/6);
+            if(first.getBattingTeam().getPlayer(i).getBallsPlayed()%6 != 0) v += "."+(first.getBattingTeam()
+                    .getPlayer(i).getBallsPlayed()%6);
+            res.append(" (").append(v).append(")").append("<br>").append(newline);
+        }
+        res.append("<br>").append("<br>");
 
         numOfBalls = second.start(numOfOvers);
-        overs = new String();
-        overs += (numOfBalls/6);
-        if(numOfBalls%6 != 0) overs += "."+(numOfBalls%6);
+        overString = Integer.toString(numOfBalls/6);
+        if(numOfBalls%6 != 0) overString += "."+(numOfBalls%6);
 
         res.append("Second Innings Score").append("<br>").append(newline);
         res.append("Team ").append(second.getBattingTeam().getName()).append(" : ").append(second.getBattingTeam()
-                .getRuns()).append("/").append(second.getBattingTeam().getWickets()).append(" (").append(overs)
-                .append(")").append("<br>").append(newline);
+                .getRuns()).append("/").append(second.getBattingTeam().getWickets()).append(" (").append(overString)
+                .append(")").append("<br>").append("<br>").append(newline);
+        res.append("Runs Scored by each Player").append("<br>").append(newline);
+        for(int i=0;i < second.getBattingTeam().getPlayers().length; i++) {
+            res.append(second.getBattingTeam().getPlayer(i).getName()).append(" : ")
+                    .append(second.getBattingTeam().getPlayer(i).getRunsScored());
+            String v = Integer.toString(second.getBattingTeam().getPlayer(i).getBallsPlayed()/6);
+            if(second.getBattingTeam().getPlayer(i).getBallsPlayed()%6 != 0) v += "."+(second.getBattingTeam()
+                    .getPlayer(i).getBallsPlayed()%6);
+            res.append(" (").append(v).append(")").append("<br>").append(newline);
+        }
 
         // After second innings if batting team runs are greater than bowling team runs then batting team wins
+        res.append("<b>");
         if(second.getBattingTeam().getRuns() > second.getBowlingTeam().getRuns()) {
             res.append("Team ").append(second.getBattingTeam().getName()).append(" wins against Team ")
                     .append(second.getBowlingTeam().getName()).append(" by ").append((10-second.getBattingTeam()
@@ -97,6 +143,7 @@ public class Match {
             res.append("Match between Team ").append(second.getBattingTeam().getName()).append(" and Team ")
                     .append(second.getBowlingTeam().getName()).append(" is tied!").append("<br>").append(newline);
         }
+        res.append("</b>");
         return res.toString();
     }
 }

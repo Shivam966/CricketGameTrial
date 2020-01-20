@@ -8,6 +8,8 @@ public class Player {
     private final String name;
     private final int jerseyNumber;
     private final int age;
+    private int runsScored, ballsPlayed;
+    private int wicketsTaken;
 
     public String getName() {
         return name;
@@ -19,6 +21,30 @@ public class Player {
 
     public int getAge() {
         return age;
+    }
+
+    public int getRunsScored(){
+        return runsScored;
+    }
+
+    public int getWicketsTaken() {
+        return wicketsTaken;
+    }
+
+    public void addRunsScored(int runs) {
+        runsScored += runs;
+    }
+
+    public void addWicketsTaken(int wickets) {
+        wicketsTaken += wickets;
+    }
+
+    public int getBallsPlayed() {
+        return ballsPlayed;
+    }
+
+    public void addBallsPlayed() {
+        ballsPlayed++;
     }
 
     public Player(String name, int jerseyNumber, int age) {

@@ -1,5 +1,7 @@
 package com.example.CricketGameTrial.domain;
 
+import org.springframework.http.converter.json.GsonBuilderUtils;
+
 public class Team {
     //"name" should be final because once a team gets a name it doesn't make sense to change that name
     private final String name;
@@ -29,6 +31,19 @@ public class Team {
 
     public void setWickets(int wickets) {
         this.wickets = wickets;
+    }
+
+    public void setPlayers(Player[] players) {
+        this.players = players;
+    }
+
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public Player getPlayer(int index) throws IndexOutOfBoundsException {
+        if(index>=11 || index<0) throw new IndexOutOfBoundsException();
+        return players[index];
     }
 
     public Team(String name) {

@@ -10,6 +10,7 @@ package com.example.CricketGameTrial.domain;
 public abstract class Innings {
 
     private Team battingTeam, bowlingTeam;
+    private Player battingPlayer, nonStrikerBattingPlayer;
 
     // start method takes number of overs to be played as an argument because innings can only start by mentioning
     // number of overs to be played in it and returns number of overs played by the batting team
@@ -29,5 +30,21 @@ public abstract class Innings {
 
     public void setBowlingTeam(Team bowlingTeam) {
         this.bowlingTeam = bowlingTeam;
+    }
+
+    public void setBattingPlayer(Player battingPlayer) {
+        this.battingPlayer = battingPlayer;
+    }
+
+    public Player getBattingPlayer() {
+        return battingPlayer;
+    }
+
+    public void setNonStrikerBattingPlayer(Player player) {
+        this.nonStrikerBattingPlayer = player;
+    }
+
+    public Player getNonStrikerBattingPlayer() {
+        return nonStrikerBattingPlayer;
     }
 }
