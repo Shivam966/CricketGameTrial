@@ -10,6 +10,7 @@ public class Player {
     private final int age;
     private int runsScored, ballsPlayed;
     private int wicketsTaken;
+    private int numOfBoundaries, numOfSixes;
 
     public String getName() {
         return name;
@@ -45,6 +46,22 @@ public class Player {
 
     public void addBallsPlayed() {
         ballsPlayed++;
+    }
+
+    public void addNumOfBoundaries() {
+        this.numOfBoundaries++;
+    }
+
+    public int getNumOfBoundaries() {
+        return numOfBoundaries;
+    }
+
+    public void addNumOfSixes() {
+        this.numOfSixes++;
+    }
+
+    public int getNumOfSixes() {
+        return numOfSixes;
     }
 
     public Player(String name, int jerseyNumber, int age) {

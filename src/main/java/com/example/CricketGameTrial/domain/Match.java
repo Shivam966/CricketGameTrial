@@ -91,10 +91,11 @@ public class Match {
                     .append("<br>").append(newline);
         }
 
-        int numOfBalls = first.start(numOfOvers);
-        String overString = Integer.toString(numOfBalls/6);
+        int numOf_Overs = first.start(numOfOvers);
+        String overString = Integer.toString(numOf_Overs);
         //overString += (numOfBalls/6);
-        if(numOfBalls%6 != 0) overString += "."+(numOfBalls%6);
+        if(first.getOvers().get(numOf_Overs-1).getBallsPlayed() != 6) overString = (numOf_Overs-1)
+                + "." + first.getOvers().get(numOf_Overs-1).getBallsPlayed();
 
         res.append("First Innings Score").append("<br>").append(newline);
         res.append("Team ").append(first.getBattingTeam().getName()).append(" : ").append(first.getBattingTeam()
@@ -111,9 +112,10 @@ public class Match {
         }
         res.append("<br>").append("<br>");
 
-        numOfBalls = second.start(numOfOvers);
-        overString = Integer.toString(numOfBalls/6);
-        if(numOfBalls%6 != 0) overString += "."+(numOfBalls%6);
+        numOf_Overs = second.start(numOfOvers);
+        overString = Integer.toString(numOf_Overs);
+        if(second.getOvers().get(numOf_Overs-1).getBallsPlayed() != 6) overString = (numOf_Overs-1)
+                + "." + second.getOvers().get(numOf_Overs-1).getBallsPlayed();
 
         res.append("Second Innings Score").append("<br>").append(newline);
         res.append("Team ").append(second.getBattingTeam().getName()).append(" : ").append(second.getBattingTeam()
