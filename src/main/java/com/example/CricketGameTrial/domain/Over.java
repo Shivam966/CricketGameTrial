@@ -1,31 +1,15 @@
 package com.example.CricketGameTrial.domain;
 
+import java.util.ArrayList;
+
 public class Over {
-    private int runsScored;       // runScored stores runs scored in that over
-    private int wicketsTaken;     // wicketsTaken stores wickets taken in that over
-    private int ballsPlayed;      // ballsPlayed stores number of balls played in that over
+    private ArrayList<Integer> balls = new ArrayList<>(); // Stores statistics of each ball
 
-    public void addRunsScored(int runsScored) {
-        this.runsScored += runsScored;
+    public ArrayList<Integer> getBalls() {
+        return balls;
     }
 
-    public int getRunsScored() {
-        return runsScored;
-    }
-
-    public void addWicketsTaken() {
-        this.wicketsTaken++;
-    }
-
-    public int getWicketsTaken() {
-        return wicketsTaken;
-    }
-
-    public void addBallsPlayed() {
-        this.ballsPlayed++;
-    }
-
-    public int getBallsPlayed() {
-        return ballsPlayed;
+    public void addBalls(int r) {
+        balls.add(r);
     }
 }

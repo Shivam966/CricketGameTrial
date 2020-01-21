@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public abstract class Innings {
 
     private Team battingTeam, bowlingTeam;
-    private Player battingPlayer, nonStrikerBattingPlayer;
+    private Player battingPlayer, nonStrikerBattingPlayer, bowlingPlayer;
     private ArrayList<Over> overs = new ArrayList<>();
 
     // start method takes number of overs to be played as an argument because innings can only start by mentioning
     // number of overs to be played in it and returns number of overs played by the batting team
-    public abstract int start(int n);
+    public abstract void start(int n);
 
     public Team getBattingTeam() {
         return battingTeam;
@@ -51,6 +51,14 @@ public abstract class Innings {
         return nonStrikerBattingPlayer;
     }
 
+    public Player getBowlingPlayer() {
+        return bowlingPlayer;
+    }
+
+    public void setBowlingPlayer(Player bowlingPlayer) {
+        this.bowlingPlayer = bowlingPlayer;
+    }
+
     public ArrayList<Over> getOvers() {
         return overs;
     }
@@ -58,4 +66,5 @@ public abstract class Innings {
     public void setOvers(ArrayList<Over> overs) {
         this.overs = overs;
     }
+
 }

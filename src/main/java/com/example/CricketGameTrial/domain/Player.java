@@ -8,9 +8,10 @@ public class Player {
     private final String name;
     private final int jerseyNumber;
     private final int age;
-    private int runsScored, ballsPlayed;
-    private int wicketsTaken;
-    private int numOfBoundaries, numOfSixes;
+    private int runsScored, ballsPlayed, ballsBowled;
+    private int wicketsTaken, runsGiven;
+    private int numOfBoundaries, numOfSixes, numOfMaidenOvers;
+    private double economy, strike_rate;
 
     public String getName() {
         return name;
@@ -36,8 +37,8 @@ public class Player {
         runsScored += runs;
     }
 
-    public void addWicketsTaken(int wickets) {
-        wicketsTaken += wickets;
+    public void addWicketsTaken() {
+        wicketsTaken++;
     }
 
     public int getBallsPlayed() {
@@ -62,6 +63,46 @@ public class Player {
 
     public int getNumOfSixes() {
         return numOfSixes;
+    }
+
+    public int getNumOfMaidenOvers() {
+        return numOfMaidenOvers;
+    }
+
+    public void addNumOfMaidenOvers() {
+        numOfMaidenOvers++;
+    }
+
+    public int getBallsBowled() {
+        return ballsBowled;
+    }
+
+    public void addBallsBowled() {
+        this.ballsBowled++;
+    }
+
+    public int getRunsGiven() {
+        return runsGiven;
+    }
+
+    public void addRunsGiven(int runsGiven) {
+        this.runsGiven += runsGiven;
+    }
+
+    public double getEconomy() {
+        return economy;
+    }
+
+    public void setEconomy(double economy) {
+        this.economy = economy;
+    }
+
+    public double getStrike_rate() {
+        return strike_rate;
+    }
+
+    public void setStrike_rate(double strike_rate) {
+        this.strike_rate = strike_rate;
     }
 
     public Player(String name, int jerseyNumber, int age) {

@@ -1,5 +1,7 @@
 package com.example.CricketGameTrial.domain;
 
+import com.example.CricketGameTrial.util.Scoreboard;
+
 import java.util.Random;
 
 public class Match {
@@ -82,7 +84,8 @@ public class Match {
         StringBuilder res = new StringBuilder();
         toss();
         res.append("<b> Team ").append(first.getBattingTeam().getName()).append(" vs Team ")
-                .append(first.getBowlingTeam().getName()).append(" </b>").append("<br>").append(newline);
+                .append(first.getBowlingTeam().getName()).append(" </b>").append("<br>").append("<br>")
+                .append(newline);
         if(tossWinningTeam == first.getBattingTeam()) {
             res.append("Team ").append(tossWinningTeam.getName()).append(" won the toss and chose to bat first.")
                     .append("<br>").append(newline);
@@ -91,61 +94,12 @@ public class Match {
                     .append("<br>").append(newline);
         }
 
-        int numOf_Overs = first.start(numOfOvers);
-        String overString = Integer.toString(numOf_Overs);
-        //overString += (numOfBalls/6);
-        if(first.getOvers().get(numOf_Overs-1).getBallsPlayed() != 6) overString = (numOf_Overs-1)
-                + "." + first.getOvers().get(numOf_Overs-1).getBallsPlayed();
+        first.start(numOfOvers);
+        second.start(numOfOvers);
+        res.append(Scoreboard.printScoreBoard(first,second));
 
-        res.append("First Innings Score").append("<br>").append(newline);
-        res.append("Team ").append(first.getBattingTeam().getName()).append(" : ").append(first.getBattingTeam()
-                .getRuns()).append("/").append(first.getBattingTeam().getWickets()).append(" (").append(overString)
-                .append(")").append("<br>").append("<br>").append(newline);
-        res.append("Runs Scored by each Player").append("<br>").append(newline);
-        for(int i=0;i < first.getBattingTeam().getPlayers().length; i++) {
-            res.append(first.getBattingTeam().getPlayer(i).getName()).append(" : ")
-                    .append(first.getBattingTeam().getPlayer(i).getRunsScored());
-            String v = Integer.toString(first.getBattingTeam().getPlayer(i).getBallsPlayed()/6);
-            if(first.getBattingTeam().getPlayer(i).getBallsPlayed()%6 != 0) v += "."+(first.getBattingTeam()
-                    .getPlayer(i).getBallsPlayed()%6);
-            res.append(" (").append(v).append(")").append("<br>").append(newline);
-        }
-        res.append("<br>").append("<br>");
-
-        numOf_Overs = second.start(numOfOvers);
-        overString = Integer.toString(numOf_Overs);
-        if(second.getOvers().get(numOf_Overs-1).getBallsPlayed() != 6) overString = (numOf_Overs-1)
-                + "." + second.getOvers().get(numOf_Overs-1).getBallsPlayed();
-
-        res.append("Second Innings Score").append("<br>").append(newline);
-        res.append("Team ").append(second.getBattingTeam().getName()).append(" : ").append(second.getBattingTeam()
-                .getRuns()).append("/").append(second.getBattingTeam().getWickets()).append(" (").append(overString)
-                .append(")").append("<br>").append("<br>").append(newline);
-        res.append("Runs Scored by each Player").append("<br>").append(newline);
-        for(int i=0;i < second.getBattingTeam().getPlayers().length; i++) {
-            res.append(second.getBattingTeam().getPlayer(i).getName()).append(" : ")
-                    .append(second.getBattingTeam().getPlayer(i).getRunsScored());
-            String v = Integer.toString(second.getBattingTeam().getPlayer(i).getBallsPlayed()/6);
-            if(second.getBattingTeam().getPlayer(i).getBallsPlayed()%6 != 0) v += "."+(second.getBattingTeam()
-                    .getPlayer(i).getBallsPlayed()%6);
-            res.append(" (").append(v).append(")").append("<br>").append(newline);
-        }
-
-        // After second innings if batting team runs are greater than bowling team runs then batting team wins
-        res.append("<b>");
-        if(second.getBattingTeam().getRuns() > second.getBowlingTeam().getRuns()) {
-            res.append("Team ").append(second.getBattingTeam().getName()).append(" wins against Team ")
-                    .append(second.getBowlingTeam().getName()).append(" by ").append((10-second.getBattingTeam()
-                    .getWickets())).append(" wickets!").append("<br>").append(newline);
-        } else if(second.getBattingTeam().getRuns() < second.getBowlingTeam().getRuns()) {
-            res.append("Team ").append(second.getBowlingTeam().getName()).append(" wins against Team ")
-                    .append(second.getBattingTeam().getName()).append(" by ").append((second.getBowlingTeam().getRuns()
-                    - second.getBattingTeam().getRuns())).append(" runs!").append("<br>").append(newline);
-        } else {
-            res.append("Match between Team ").append(second.getBattingTeam().getName()).append(" and Team ")
-                    .append(second.getBowlingTeam().getName()).append(" is tied!").append("<br>").append(newline);
-        }
-        res.append("</b>");
+        first.getOvers().clear();
+        second.getOvers().clear();
         return res.toString();
     }
 }
