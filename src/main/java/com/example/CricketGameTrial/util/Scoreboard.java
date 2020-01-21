@@ -18,9 +18,25 @@ public class Scoreboard {
         if(first.getOvers().get(numOf_Overs-1).getBalls().size() != 6) overString = (numOf_Overs-1) + "."
                 + first.getOvers().get(numOf_Overs-1).getBalls().size();
 
+        res.append("<style>\n" +
+                "table {\n" +
+                "  font-family: arial, sans-serif;\n" +
+                "  border-collapse: collapse;\n" +
+                "}\n" +
+                "\n" +
+                "td, th {\n" +
+                "  border: 1px solid #dddddd;\n" +
+                "  text-align: left;\n" +
+                "  padding: 8px;\n" +
+                "}\n" +
+                "\n" +
+                "tr:nth-child(even) {\n" +
+                "  background-color: #dddddd;\n" +
+                "}\n" +
+                "</style>");
         res.append("<br>").append("First Innings Score Board").append("<br>").append(newline);
 
-        res.append("<table style=\"width:100%, border:1\"> <caption>").append("Team ").append(first
+        res.append("<table> <caption>").append("Team ").append(first
                 .getBattingTeam().getName()).append(" : ").append(first.getBattingTeam()
                 .getRuns()).append("/").append(first.getBattingTeam().getWickets()).append(" (").append(overString)
                 .append(")").append(" </caption> <tr> <th> Name </th>" +
@@ -47,7 +63,7 @@ public class Scoreboard {
         }
         res.append("</table>").append("<br>").append("<br>");
 
-        res.append("<table style=\"width:100%, border:1\"> <caption>").append("Team ").append(first
+        res.append("<table> <caption>").append("Team ").append(first
                 .getBowlingTeam().getName()).append(" </caption> <tr> <th> Name </th>" +
                 " <th> Overs-Played </th> <th> Runs-Given </th> <th> Wickets-taken </th> <th> Number of maidens " +
                 "</th> <th> Economy </th></tr>");
@@ -78,7 +94,7 @@ public class Scoreboard {
 
         res.append("Second Innings Score Board").append("<br>").append(newline);
 
-        res.append("<table style=\"width:100%, border:1\"> <caption>").append("Team ").append(second
+        res.append("<table> <caption>").append("Team ").append(second
                 .getBattingTeam().getName()).append(" : ").append(second.getBattingTeam()
                 .getRuns()).append("/").append(second.getBattingTeam().getWickets()).append(" (").append(overString)
                 .append(")").append(" </caption> <tr> <th> Name </th>" +
@@ -105,7 +121,7 @@ public class Scoreboard {
         }
         res.append("</table>").append("<br>").append("<br>");
 
-        res.append("<table style=\"width:100%, border:1\"> <caption>").append("Team ").append(second
+        res.append("<table> <caption>").append("Team ").append(second
                 .getBowlingTeam().getName()).append(" </caption> <tr> <th> Name </th>" +
                 " <th> Overs-Played </th> <th> Runs-Given </th> <th> Wickets-taken </th> <th> Number of maidens " +
                 "</th> <th> Economy </th> </tr>");
