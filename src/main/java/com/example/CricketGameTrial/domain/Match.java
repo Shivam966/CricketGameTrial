@@ -2,6 +2,8 @@ package com.example.CricketGameTrial.domain;
 
 import com.example.CricketGameTrial.util.Scoreboard;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
 
 public class Match {
@@ -15,7 +17,8 @@ public class Match {
     private FirstInnings first = new FirstInnings();
     private SecondInnings second = new SecondInnings();
     private int numOfOvers;
-    private Team tossWinningTeam;
+    private String tossWinningTeam;
+    private String choseTo = "Bowl";
 
     public void setTeamName(String team1, String team2) {
         a = new Team(team1);
@@ -50,11 +53,13 @@ public class Match {
         // If "tossResult" is true, then team "a" won the toss and if result is false then team "b" won toss
         boolean tossResult = r.nextBoolean();
 
-        if(tossResult) tossWinningTeam = a;
-        else tossWinningTeam = b;
+        if(tossResult) tossWinningTeam = a.getName();
+        else tossWinningTeam = b.getName();
 
         // If "decision" is true, then winning team chooses bat first and if it is false then it chooses bowl first
         boolean decision = r.nextBoolean();
+
+        if(decision) choseTo = "Bat";
 
         if(tossResult==decision) {
             first.setBattingTeam(a);
@@ -71,35 +76,60 @@ public class Match {
 
     // startMatch method is the actual method that will start the match, it will call toss(), first.start(int) and
     // second.start(int)
-    public String startMatch(int overs) {
+    public Scoreboard startMatch(int overs) {
 
         setPlayers(a);
         setPlayers(b);
         numOfOvers = overs;
-        // Using System.lineSeparator() for newline so that code will be platform independent.
-        String newline = System.lineSeparator();
-        // res contains the final result string that startMatch() will return
-        // StringBuilder is used to improve performance instead of string because string is immutable every time we
-        // concatenate two strings new string is created
-        StringBuilder res = new StringBuilder();
+
         toss();
-        res.append("<b> Team ").append(first.getBattingTeam().getName()).append(" vs Team ")
-                .append(first.getBowlingTeam().getName()).append(" </b>").append("<br>").append("<br>")
-                .append(newline);
-        if(tossWinningTeam == first.getBattingTeam()) {
-            res.append("Team ").append(tossWinningTeam.getName()).append(" won the toss and chose to bat first.")
-                    .append("<br>").append(newline);
-        } else {
-            res.append("Team ").append(tossWinningTeam.getName()).append(" won the toss and chose to bowl first.")
-                    .append("<br>").append(newline);
-        }
 
         first.start(numOfOvers);
         second.start(numOfOvers);
-        res.append(Scoreboard.printScoreBoard(first,second));
+
+        for(int i = 0;i < first.getBowlingTeam().getPlayers().length; i++) {
+
+            if(first.getBowlingTeam().getPlayer(i).getBallsBowled()!=0)  first.getBowlingTeam().getPlayer(i)
+                    .setEconomy(Math.round((double)first.getBowlingTeam().getPlayer(i).getRunsGiven()/
+                    first.getBowlingTeam().getPlayer(i).getBallsBowled()*600.0)/100.0);
+
+            if(first.getBowlingTeam().getPlayer(i).getBallsPlayed()!=0) first.getBowlingTeam().getPlayer(i)
+                    .setStrike_rate(Math.round((double)first.getBowlingTeam().getPlayer(i).getRunsScored()/
+                            first.getBowlingTeam().getPlayer(i).getBallsPlayed()*10000.0)/100.0);
+        }
+
+        for(int i = 0;i < second.getBowlingTeam().getPlayers().length; i++) {
+
+            if(second.getBowlingTeam().getPlayer(i).getBallsBowled()!=0)  second.getBowlingTeam().getPlayer(i)
+                    .setEconomy(Math.round((double)second.getBowlingTeam().getPlayer(i).getRunsGiven()/
+                            second.getBowlingTeam().getPlayer(i).getBallsBowled()*600.0)/100.0);
+
+            if(second.getBowlingTeam().getPlayer(i).getBallsPlayed()!=0) second.getBowlingTeam().getPlayer(i)
+                    .setStrike_rate(Math.round((double)second.getBowlingTeam().getPlayer(i).getRunsScored()/
+                            second.getBowlingTeam().getPlayer(i).getBallsPlayed()*10000.0)/100.0);
+
+        }
+
+        String result;
+        if(second.getBattingTeam().getRuns() > second.getBowlingTeam().getRuns()) {
+            result = "Team "
+                    + second.getBattingTeam().getName() + " won by " + (10 - second.getBattingTeam().getWickets());
+            if(second.getBattingTeam().getWickets() == 9) result += " wicket!";
+            else result += " wickets!";
+        }
+        else if(second.getBattingTeam().getRuns() < second.getBowlingTeam().getRuns()) {
+            result = "Team "
+                    + second.getBowlingTeam().getName() + " won by "
+                    + (second.getBowlingTeam().getRuns() - second.getBattingTeam().getRuns());
+            if(second.getBowlingTeam().getRuns()-second.getBattingTeam().getRuns()==1) result += " run!";
+            else result += " runs!";
+        }
+        else result = "Match is tied!";
+
 
         first.getOvers().clear();
         second.getOvers().clear();
-        return res.toString();
+
+        return new Scoreboard(overs, tossWinningTeam, choseTo, a, b, result);
     }
 }

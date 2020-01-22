@@ -1,6 +1,7 @@
 package com.example.CricketGameTrial.controller;
 
 import com.example.CricketGameTrial.domain.Match;
+import com.example.CricketGameTrial.util.Scoreboard;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ public class MatchController {
     }
 
     @GetMapping("/startMatch")
-    public String start(@RequestParam int overs, @RequestParam String team1, @RequestParam String team2) {
+    public Scoreboard start(@RequestParam int overs, @RequestParam String team1, @RequestParam String team2) {
         m.setTeamName(team1,team2);
         m.setPlayers(m.getTeamA());
         m.setPlayers(m.getTeamB());
