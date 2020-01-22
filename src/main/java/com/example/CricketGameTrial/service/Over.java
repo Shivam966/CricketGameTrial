@@ -1,8 +1,8 @@
-package com.example.CricketGameTrial.domain;
+package com.example.CricketGameTrial.service;
 
 import java.util.ArrayList;
 
-public class Over {
+class Over {
     private ArrayList<Integer> balls = new ArrayList<>(); // Stores statistics of each ball
 
     public ArrayList<Integer> getBalls() {

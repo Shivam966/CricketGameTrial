@@ -1,6 +1,6 @@
 package com.example.CricketGameTrial.controller;
 
-import com.example.CricketGameTrial.domain.Match;
+import com.example.CricketGameTrial.service.Match;
 import com.example.CricketGameTrial.util.Scoreboard;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

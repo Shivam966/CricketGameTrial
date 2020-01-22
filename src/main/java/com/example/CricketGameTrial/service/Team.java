@@ -1,6 +1,4 @@
-package com.example.CricketGameTrial.domain;
-
-import org.springframework.http.converter.json.GsonBuilderUtils;
+package com.example.CricketGameTrial.service;
 
 public class Team {
     //"name" should be final because once a team gets a name it doesn't make sense to change that name

@@ -1,7 +1,7 @@
-package com.example.CricketGameTrial.domain;
+package com.example.CricketGameTrial.service;
 
 //FirstInnings is a Innings and thus it extends Innings.
-public class FirstInnings extends Innings {
+class FirstInnings extends Innings {
 
     // In start method of first innings there will be no target to achieve.
     @Override

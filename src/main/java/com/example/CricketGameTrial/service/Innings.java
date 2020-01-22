@@ -1,4 +1,4 @@
-package com.example.CricketGameTrial.domain;
+package com.example.CricketGameTrial.service;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
    start() method has been made abstract because first innings and seconds innings will have different implementations
    of start, latter will have target
 */
-public abstract class Innings {
+abstract class Innings {
 
     private Team battingTeam, bowlingTeam;
     private Player battingPlayer, nonStrikerBattingPlayer, bowlingPlayer;

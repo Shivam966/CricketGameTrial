@@ -1,9 +1,7 @@
-package com.example.CricketGameTrial.domain;
+package com.example.CricketGameTrial.service;
 
 import com.example.CricketGameTrial.util.Scoreboard;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Random;
 
 public class Match {
