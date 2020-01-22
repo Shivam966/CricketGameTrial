@@ -36,7 +36,9 @@ class FirstInnings extends Innings {
                     if(ran==4) this.getBattingPlayer().addNumOfBoundaries();
                     if(ran==6) this.getBattingPlayer().addNumOfSixes();
                 }
-                this.getOvers().get(this.getOvers().size()-1).getBalls().add(ran);
+                if(ran<7) this.getOvers().get(this.getOvers().size()-1).getBalls().add(Character.forDigit(ran,
+                        10));
+                else this.getOvers().get(this.getOvers().size()-1).getBalls().add('W');
                 //this.getBattingTeam().setRuns(runs);           // Runs and wickets can be updated loop wise also
                 //this.getBattingTeam().setWickets(wickets);     // if needed for further enhancement
                 c++;

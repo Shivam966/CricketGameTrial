@@ -2,14 +2,14 @@ package com.example.CricketGameTrial.service;
 
 import java.util.ArrayList;
 
-class Over {
-    private ArrayList<Integer> balls = new ArrayList<>(); // Stores statistics of each ball
+public class Over {
+    private ArrayList<Character> balls = new ArrayList<>(); // Stores statistics of each ball
 
-    public ArrayList<Integer> getBalls() {
+    public ArrayList<Character> getBalls() {
         return balls;
     }
 
-    public void addBalls(int r) {
+    public void addBalls(Character r) {
         balls.add(r);
     }
 }

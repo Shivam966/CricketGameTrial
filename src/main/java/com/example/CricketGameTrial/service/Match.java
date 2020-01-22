@@ -2,6 +2,8 @@ package com.example.CricketGameTrial.service;
 
 import com.example.CricketGameTrial.util.Scoreboard;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class Match {
@@ -124,10 +126,12 @@ public class Match {
         }
         else result = "Match is tied!";
 
+        ArrayList<Over> firstInningsOver = new ArrayList<>(first.getOvers()),
+                secondInningsOver = new ArrayList<>(second.getOvers());
 
         first.getOvers().clear();
         second.getOvers().clear();
 
-        return new Scoreboard(overs, tossWinningTeam, choseTo, a, b, result);
+        return new Scoreboard(overs, tossWinningTeam, choseTo, a, b, firstInningsOver, secondInningsOver, result);
     }
 }
