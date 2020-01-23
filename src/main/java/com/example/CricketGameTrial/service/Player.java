@@ -10,11 +10,9 @@ import lombok.Getter;
 @Getter
 class Player {
     private final String name;
-    private final int jerseyNumber;
-    private final int age;
-    private int runsScored, ballsPlayed, ballsBowled;
-    private int wicketsTaken, runsGiven;
-    private int numOfBoundaries, numOfSixes, numOfMaidenOvers;
+    private final int jerseyNumber, age;
+    private int runsScored, ballsPlayed, ballsBowled, wicketsTaken, runsGiven;
+    private int numOfFours, numOfSixes, numOfMaidenOvers;
     private double economy, strike_rate;
 
     public void addRunsScored(int runs) {
@@ -29,8 +27,8 @@ class Player {
         ballsPlayed++;
     }
 
-    public void addNumOfBoundaries() {
-        this.numOfBoundaries++;
+    public void addNumOfFours() {
+        this.numOfFours++;
     }
 
     public void addNumOfSixes() {

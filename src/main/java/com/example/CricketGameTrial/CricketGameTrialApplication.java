@@ -16,16 +16,4 @@ public class CricketGameTrialApplication {
 		SpringApplication.run(CricketGameTrialApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-			System.out.println("Lets inspect the beans provided by Spring Boot:");
-
-			String[] beanNames = ctx.getBeanDefinitionNames();
-			Arrays.sort(beanNames);
-			for( String name : beanNames) {
-				System.out.println(name);
-			}
-		};
-	}
 }

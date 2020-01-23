@@ -1,6 +1,8 @@
 package com.example.CricketGameTrial.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
@@ -11,7 +13,8 @@ import java.util.ArrayList;
    start() method has been made abstract because first innings and seconds innings will have different implementations
    of start, latter will have target
 */
-
+@Getter
+@Setter
 @JsonIgnoreProperties ({"battingTeam","bowlingTeam","battingPlayer","nonStrikerBattingPlayer","bowlingPlayer"})
 abstract class Innings {
 
@@ -22,53 +25,4 @@ abstract class Innings {
     // start method takes number of overs to be played as an argument because innings can only start by mentioning
     // number of overs to be played in it and returns number of overs played by the batting team
     public abstract void start(int n);
-
-    public Team getBattingTeam() {
-        return battingTeam;
-    }
-
-    public Team getBowlingTeam() {
-        return bowlingTeam;
-    }
-
-    public void setBattingTeam(Team battingTeam) {
-        this.battingTeam = battingTeam;
-    }
-
-    public void setBowlingTeam(Team bowlingTeam) {
-        this.bowlingTeam = bowlingTeam;
-    }
-
-    public void setBattingPlayer(Player battingPlayer) {
-        this.battingPlayer = battingPlayer;
-    }
-
-    public Player getBattingPlayer() {
-        return battingPlayer;
-    }
-
-    public void setNonStrikerBattingPlayer(Player player) {
-        this.nonStrikerBattingPlayer = player;
-    }
-
-    public Player getNonStrikerBattingPlayer() {
-        return nonStrikerBattingPlayer;
-    }
-
-    public Player getBowlingPlayer() {
-        return bowlingPlayer;
-    }
-
-    public void setBowlingPlayer(Player bowlingPlayer) {
-        this.bowlingPlayer = bowlingPlayer;
-    }
-
-    public ArrayList<Over> getOvers() {
-        return overs;
-    }
-
-    public void setOvers(ArrayList<Over> overs) {
-        this.overs = overs;
-    }
-
 }

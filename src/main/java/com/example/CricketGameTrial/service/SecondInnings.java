@@ -7,9 +7,8 @@ class SecondInnings extends Innings {
     @Override
     public void start(int numOfOvers) {
         int runs = 0, wickets = 0, target = this.getBowlingTeam().getRuns(); // target is set as bowling teams score
-        int count = 0, ran;                            // to win the match batting team should
+        int count = 0, ran, index = 6;                            // to win the match batting team should
                                                                              // score higher than target
-        int index = 6;
         this.setBattingPlayer(this.getBattingTeam().getPlayer(0));
         this.setNonStrikerBattingPlayer(this.getBattingTeam().getPlayer(1));
         this.setBowlingPlayer(this.getBowlingTeam().getPlayer(index));
@@ -34,7 +33,7 @@ class SecondInnings extends Innings {
                     runsInOver += ran;
                     this.getBattingPlayer().addRunsScored(ran);
                     this.getBowlingPlayer().addRunsGiven(ran);
-                    if(ran==4) this.getBattingPlayer().addNumOfBoundaries();
+                    if(ran==4) this.getBattingPlayer().addNumOfFours();
                     if(ran==6) this.getBattingPlayer().addNumOfSixes();
                 }
                 if(ran<7) this.getOvers().get(this.getOvers().size()-1).getBalls().add(Character.forDigit(ran,

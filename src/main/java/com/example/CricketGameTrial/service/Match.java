@@ -81,28 +81,8 @@ public class Match {
         firstInnings.start(numOfOvers);
         secondInnings.start(numOfOvers);
 
-        for(int i = 0;i < firstInnings.getBowlingTeam().getPlayers().length; i++) {
-
-            if(firstInnings.getBowlingTeam().getPlayer(i).getBallsBowled()!=0)  firstInnings.getBowlingTeam()
-                    .getPlayer(i).setEconomy(Math.round((double)firstInnings.getBowlingTeam().getPlayer(i).getRunsGiven()/
-                    firstInnings.getBowlingTeam().getPlayer(i).getBallsBowled()*600.0)/100.0);
-
-            if(firstInnings.getBowlingTeam().getPlayer(i).getBallsPlayed()!=0) firstInnings.getBowlingTeam().getPlayer(i)
-                    .setStrike_rate(Math.round((double)firstInnings.getBowlingTeam().getPlayer(i).getRunsScored()/
-                            firstInnings.getBowlingTeam().getPlayer(i).getBallsPlayed()*10000.0)/100.0);
-        }
-
-        for(int i = 0;i < secondInnings.getBowlingTeam().getPlayers().length; i++) {
-
-            if(secondInnings.getBowlingTeam().getPlayer(i).getBallsBowled()!=0)  secondInnings.getBowlingTeam().getPlayer(i)
-                    .setEconomy(Math.round((double)secondInnings.getBowlingTeam().getPlayer(i).getRunsGiven()/
-                            secondInnings.getBowlingTeam().getPlayer(i).getBallsBowled()*600.0)/100.0);
-
-            if(secondInnings.getBowlingTeam().getPlayer(i).getBallsPlayed()!=0) secondInnings.getBowlingTeam().getPlayer(i)
-                    .setStrike_rate(Math.round((double)secondInnings.getBowlingTeam().getPlayer(i).getRunsScored()/
-                            secondInnings.getBowlingTeam().getPlayer(i).getBallsPlayed()*10000.0)/100.0);
-
-        }
+        teamA.setEconomyAndStrikeRate();
+        teamB.setEconomyAndStrikeRate();
 
         if(secondInnings.getBattingTeam().getRuns() > secondInnings.getBowlingTeam().getRuns()) {
             result = "Team " + secondInnings.getBattingTeam().getName() + " won by " +

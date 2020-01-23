@@ -7,7 +7,7 @@ class FirstInnings extends Innings {
     @Override
     public void start(int numOfOvers) {
         int wickets = 0, runs = 0;  // wickets and runs represent usual convention
-        //int balls = numOfOvers*6;  // balls represents number of balls to be played
+                              // balls represents number of balls to be played
         int count = 0, ran; // count is counter for while loop to check numOfOvers and ran will be used for random
         int index = 6;
         this.setBattingPlayer(this.getBattingTeam().getPlayer(0));
@@ -33,7 +33,7 @@ class FirstInnings extends Innings {
                     runsInOver += ran;
                     this.getBattingPlayer().addRunsScored(ran);
                     this.getBowlingPlayer().addRunsGiven(ran);
-                    if(ran==4) this.getBattingPlayer().addNumOfBoundaries();
+                    if(ran==4) this.getBattingPlayer().addNumOfFours();
                     if(ran==6) this.getBattingPlayer().addNumOfSixes();
                 }
                 if(ran<7) this.getOvers().get(this.getOvers().size()-1).getBalls().add(Character.forDigit(ran,
