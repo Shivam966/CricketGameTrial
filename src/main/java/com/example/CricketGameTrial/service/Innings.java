@@ -1,5 +1,7 @@
 package com.example.CricketGameTrial.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 
 /* Innings class is kept abstract because it does not make sense to make instance of innings class, it's purpose is to
@@ -9,6 +11,8 @@ import java.util.ArrayList;
    start() method has been made abstract because first innings and seconds innings will have different implementations
    of start, latter will have target
 */
+
+@JsonIgnoreProperties ({"battingTeam","bowlingTeam","battingPlayer","nonStrikerBattingPlayer","bowlingPlayer"})
 abstract class Innings {
 
     private Team battingTeam, bowlingTeam;

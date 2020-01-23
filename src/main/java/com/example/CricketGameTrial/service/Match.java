@@ -1,11 +1,12 @@
 package com.example.CricketGameTrial.service;
 
-import com.example.CricketGameTrial.util.Scoreboard;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+@Getter
 public class Match {
     /*
     Match class will have 2 team objects because each match comprises of 2 teams but vice versa is not true, thus it is
@@ -13,24 +14,17 @@ public class Match {
     In the same way it will have 2 innings-first and second, 1 numOfOvers variable to determine how many overs each
     inning will play and 1 tossWinningTeam variable that will store the toss winning team.
     */
-    private Team a,b;
-    private FirstInnings first = new FirstInnings();
-    private SecondInnings second = new SecondInnings();
     private int numOfOvers;
     private String tossWinningTeam;
     private String choseTo = "Bowl";
+    private Team teamA,teamB;
+    private FirstInnings firstInnings = new FirstInnings();
+    private SecondInnings secondInnings = new SecondInnings();
+    private String result;
 
     public void setTeamName(String team1, String team2) {
-        a = new Team(team1);
-        b = new Team(team2);
-    }
-
-    public Team getTeamA() {
-        return a;
-    }
-
-    public Team getTeamB() {
-        return b;
+        teamA = new Team(team1);
+        teamB = new Team(team2);
     }
 
     public void setPlayers(Team t) {
@@ -53,8 +47,8 @@ public class Match {
         // If "tossResult" is true, then team "a" won the toss and if result is false then team "b" won toss
         boolean tossResult = r.nextBoolean();
 
-        if(tossResult) tossWinningTeam = a.getName();
-        else tossWinningTeam = b.getName();
+        if(tossResult) tossWinningTeam = teamA.getName();
+        else tossWinningTeam = teamB.getName();
 
         // If "decision" is true, then winning team chooses bat first and if it is false then it chooses bowl first
         boolean decision = r.nextBoolean();
@@ -62,76 +56,69 @@ public class Match {
         if(decision) choseTo = "Bat";
 
         if(tossResult==decision) {
-            first.setBattingTeam(a);
-            first.setBowlingTeam(b);
-            second.setBattingTeam(b);
-            second.setBowlingTeam(a);
+            firstInnings.setBattingTeam(teamA);
+            firstInnings.setBowlingTeam(teamB);
+            secondInnings.setBattingTeam(teamB);
+            secondInnings.setBowlingTeam(teamA);
         } else {
-            first.setBattingTeam(b);
-            first.setBowlingTeam(a);
-            second.setBattingTeam(a);
-            second.setBowlingTeam(b);
+            firstInnings.setBattingTeam(teamB);
+            firstInnings.setBowlingTeam(teamA);
+            secondInnings.setBattingTeam(teamA);
+            secondInnings.setBowlingTeam(teamB);
         }
     }
 
     // startMatch method is the actual method that will start the match, it will call toss(), first.start(int) and
     // second.start(int)
-    public Scoreboard startMatch(int overs) {
+    public Match startMatch(int overs) {
 
-        setPlayers(a);
-        setPlayers(b);
+        setPlayers(teamA);
+        setPlayers(teamB);
         numOfOvers = overs;
 
         toss();
 
-        first.start(numOfOvers);
-        second.start(numOfOvers);
+        firstInnings.start(numOfOvers);
+        secondInnings.start(numOfOvers);
 
-        for(int i = 0;i < first.getBowlingTeam().getPlayers().length; i++) {
+        for(int i = 0;i < firstInnings.getBowlingTeam().getPlayers().length; i++) {
 
-            if(first.getBowlingTeam().getPlayer(i).getBallsBowled()!=0)  first.getBowlingTeam().getPlayer(i)
-                    .setEconomy(Math.round((double)first.getBowlingTeam().getPlayer(i).getRunsGiven()/
-                    first.getBowlingTeam().getPlayer(i).getBallsBowled()*600.0)/100.0);
+            if(firstInnings.getBowlingTeam().getPlayer(i).getBallsBowled()!=0)  firstInnings.getBowlingTeam()
+                    .getPlayer(i).setEconomy(Math.round((double)firstInnings.getBowlingTeam().getPlayer(i).getRunsGiven()/
+                    firstInnings.getBowlingTeam().getPlayer(i).getBallsBowled()*600.0)/100.0);
 
-            if(first.getBowlingTeam().getPlayer(i).getBallsPlayed()!=0) first.getBowlingTeam().getPlayer(i)
-                    .setStrike_rate(Math.round((double)first.getBowlingTeam().getPlayer(i).getRunsScored()/
-                            first.getBowlingTeam().getPlayer(i).getBallsPlayed()*10000.0)/100.0);
+            if(firstInnings.getBowlingTeam().getPlayer(i).getBallsPlayed()!=0) firstInnings.getBowlingTeam().getPlayer(i)
+                    .setStrike_rate(Math.round((double)firstInnings.getBowlingTeam().getPlayer(i).getRunsScored()/
+                            firstInnings.getBowlingTeam().getPlayer(i).getBallsPlayed()*10000.0)/100.0);
         }
 
-        for(int i = 0;i < second.getBowlingTeam().getPlayers().length; i++) {
+        for(int i = 0;i < secondInnings.getBowlingTeam().getPlayers().length; i++) {
 
-            if(second.getBowlingTeam().getPlayer(i).getBallsBowled()!=0)  second.getBowlingTeam().getPlayer(i)
-                    .setEconomy(Math.round((double)second.getBowlingTeam().getPlayer(i).getRunsGiven()/
-                            second.getBowlingTeam().getPlayer(i).getBallsBowled()*600.0)/100.0);
+            if(secondInnings.getBowlingTeam().getPlayer(i).getBallsBowled()!=0)  secondInnings.getBowlingTeam().getPlayer(i)
+                    .setEconomy(Math.round((double)secondInnings.getBowlingTeam().getPlayer(i).getRunsGiven()/
+                            secondInnings.getBowlingTeam().getPlayer(i).getBallsBowled()*600.0)/100.0);
 
-            if(second.getBowlingTeam().getPlayer(i).getBallsPlayed()!=0) second.getBowlingTeam().getPlayer(i)
-                    .setStrike_rate(Math.round((double)second.getBowlingTeam().getPlayer(i).getRunsScored()/
-                            second.getBowlingTeam().getPlayer(i).getBallsPlayed()*10000.0)/100.0);
+            if(secondInnings.getBowlingTeam().getPlayer(i).getBallsPlayed()!=0) secondInnings.getBowlingTeam().getPlayer(i)
+                    .setStrike_rate(Math.round((double)secondInnings.getBowlingTeam().getPlayer(i).getRunsScored()/
+                            secondInnings.getBowlingTeam().getPlayer(i).getBallsPlayed()*10000.0)/100.0);
 
         }
 
-        String result;
-        if(second.getBattingTeam().getRuns() > second.getBowlingTeam().getRuns()) {
-            result = "Team "
-                    + second.getBattingTeam().getName() + " won by " + (10 - second.getBattingTeam().getWickets());
-            if(second.getBattingTeam().getWickets() == 9) result += " wicket!";
+        if(secondInnings.getBattingTeam().getRuns() > secondInnings.getBowlingTeam().getRuns()) {
+            result = "Team " + secondInnings.getBattingTeam().getName() + " won by " +
+                    (10 - secondInnings.getBattingTeam().getWickets());
+            if(secondInnings.getBattingTeam().getWickets() == 9) result += " wicket!";
             else result += " wickets!";
         }
-        else if(second.getBattingTeam().getRuns() < second.getBowlingTeam().getRuns()) {
+        else if(secondInnings.getBattingTeam().getRuns() < secondInnings.getBowlingTeam().getRuns()) {
             result = "Team "
-                    + second.getBowlingTeam().getName() + " won by "
-                    + (second.getBowlingTeam().getRuns() - second.getBattingTeam().getRuns());
-            if(second.getBowlingTeam().getRuns()-second.getBattingTeam().getRuns()==1) result += " run!";
+                    + secondInnings.getBowlingTeam().getName() + " won by "
+                    + (secondInnings.getBowlingTeam().getRuns() - secondInnings.getBattingTeam().getRuns());
+            if(secondInnings.getBowlingTeam().getRuns()-secondInnings.getBattingTeam().getRuns()==1) result += " run!";
             else result += " runs!";
         }
         else result = "Match is tied!";
 
-        ArrayList<Over> firstInningsOver = new ArrayList<>(first.getOvers()),
-                secondInningsOver = new ArrayList<>(second.getOvers());
-
-        first.getOvers().clear();
-        second.getOvers().clear();
-
-        return new Scoreboard(overs, tossWinningTeam, choseTo, a, b, firstInningsOver, secondInningsOver, result);
+        return this;
     }
 }

@@ -1,7 +1,6 @@
 package com.example.CricketGameTrial.controller;
 
 import com.example.CricketGameTrial.service.Match;
-import com.example.CricketGameTrial.util.Scoreboard;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 public class MatchController {
 
-    Match m = new Match();
-
     // RequestMapping and GetMapping is for making use of a method to handle a URI pattern
     @RequestMapping("/")
     public String Homepage() {
@@ -22,7 +19,8 @@ public class MatchController {
     }
 
     @GetMapping("/startMatch")
-    public Scoreboard start(@RequestParam int overs, @RequestParam String team1, @RequestParam String team2) {
+    public Match start(@RequestParam int overs, @RequestParam String team1, @RequestParam String team2) {
+        Match m = new Match();
         m.setTeamName(team1,team2);
         m.setPlayers(m.getTeamA());
         m.setPlayers(m.getTeamB());
