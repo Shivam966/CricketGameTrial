@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class Team {
+public class CricketTeam {
     //"name" should be final because once a team gets a name it doesn't make sense to change that name
     private final String name;
 
@@ -14,9 +14,9 @@ public class Team {
     private int wickets;
 
     // Assuming right now that each team has only 11 players and no substitutes
-    Player[] players = new Player[11];
+    CricketPlayer[] players = new CricketPlayer[11];
 
-    public Player getPlayer(int index) throws IndexOutOfBoundsException {
+    public CricketPlayer getPlayer(int index) throws IndexOutOfBoundsException {
         if(index>=11 || index<0) throw new IndexOutOfBoundsException();
         return players[index];
     }
@@ -34,7 +34,7 @@ public class Team {
         }
     }
 
-    public Team(String name) {
+    public CricketTeam(String name) {
         this.name = name;
     }
 }

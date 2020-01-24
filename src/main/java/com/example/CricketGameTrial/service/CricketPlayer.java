@@ -8,7 +8,7 @@ package com.example.CricketGameTrial.service;
 import lombok.Getter;
 
 @Getter
-class Player {
+class CricketPlayer {
     private final String name;
     private final int jerseyNumber, age;
     private int runsScored, ballsPlayed, ballsBowled, wicketsTaken, runsGiven;
@@ -55,7 +55,7 @@ class Player {
         this.strike_rate = strike_rate;
     }
 
-    public Player(String name, int jerseyNumber, int age) {
+    public CricketPlayer(String name, int jerseyNumber, int age) {
         this.name = name;
         this.jerseyNumber = jerseyNumber;
         this.age = age;

@@ -2,12 +2,10 @@ package com.example.CricketGameTrial.service;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 @Getter
-public class Match {
+public class CricketMatch {
     /*
     Match class will have 2 team objects because each match comprises of 2 teams but vice versa is not true, thus it is
     an Aggregation relationship.
@@ -17,23 +15,23 @@ public class Match {
     private int numOfOvers;
     private String tossWinningTeam;
     private String choseTo = "Bowl";
-    private Team teamA,teamB;
-    private FirstInnings firstInnings = new FirstInnings();
-    private SecondInnings secondInnings = new SecondInnings();
+    private CricketTeam teamA,teamB;
+    private Innings firstInnings = new Innings();
+    private Innings secondInnings = new Innings();
     private String result;
 
     public void setTeamName(String team1, String team2) {
-        teamA = new Team(team1);
-        teamB = new Team(team2);
+        teamA = new CricketTeam(team1);
+        teamB = new CricketTeam(team2);
     }
 
-    public void setPlayers(Team t) {
-        Player[] players = new Player[11];
+    public void setPlayers(CricketTeam t) {
+        CricketPlayer[] players = new CricketPlayer[11];
         StringBuilder s = new StringBuilder();
         for(int i=0; i < players.length; i++) {
             s.setLength(0);
             s.append("Player ").append((i+1));
-            Player p = new Player(s.toString(),i+1,i+1);
+            CricketPlayer p = new CricketPlayer(s.toString(),i+1,i+1);
             players[i] = p;
         }
         t.setPlayers(players);
@@ -70,7 +68,7 @@ public class Match {
 
     // startMatch method is the actual method that will start the match, it will call toss(), first.start(int) and
     // second.start(int)
-    public Match startMatch(int overs) {
+    public CricketMatch startMatch(int overs) {
 
         setPlayers(teamA);
         setPlayers(teamB);
@@ -79,7 +77,7 @@ public class Match {
         toss();
 
         firstInnings.start(numOfOvers);
-        secondInnings.start(numOfOvers);
+        secondInnings.start(numOfOvers, secondInnings.getBowlingTeam().getRuns());
 
         teamA.setEconomyAndStrikeRate();
         teamB.setEconomyAndStrikeRate();

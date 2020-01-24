@@ -1,6 +1,6 @@
 package com.example.CricketGameTrial.controller;
 
-import com.example.CricketGameTrial.service.Match;
+import com.example.CricketGameTrial.service.CricketMatch;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +19,8 @@ public class MatchController {
     }
 
     @GetMapping("/startMatch")
-    public Match start(@RequestParam int overs, @RequestParam String team1, @RequestParam String team2) {
-        Match m = new Match();
+    public CricketMatch start(@RequestParam int overs, @RequestParam String team1, @RequestParam String team2) {
+        CricketMatch m = new CricketMatch();
         m.setTeamName(team1,team2);
         m.setPlayers(m.getTeamA());
         m.setPlayers(m.getTeamB());
