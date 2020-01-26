@@ -1,4 +1,4 @@
-package com.example.CricketGameTrial.service;
+package com.example.CricketGameTrial.models;
 
 // Player class will contain details of each player
 // Right now basic details have been added, other variables like height, weight can be added if needed
@@ -6,17 +6,19 @@ package com.example.CricketGameTrial.service;
 // wicketsTaken, runsScored, battingAverage, maxBowlingSpeed, etc. if needed
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-class CricketPlayer {
-    private final String name;
+@Setter
+public class CricketPlayer {
+    private final String name, team;
     private final int jerseyNumber, age;
     private int runsScored, ballsPlayed, ballsBowled, wicketsTaken, runsGiven;
     private int numOfFours, numOfSixes, numOfMaidenOvers;
-    private double economy, strike_rate;
+    private float economy, strike_rate;
 
     public void addRunsScored(int runs) {
-        runsScored += runs;
+        runsScored+=runs;
     }
 
     public void addWicketsTaken() {
@@ -28,11 +30,11 @@ class CricketPlayer {
     }
 
     public void addNumOfFours() {
-        this.numOfFours++;
+        numOfFours++;
     }
 
     public void addNumOfSixes() {
-        this.numOfSixes++;
+        numOfSixes++;
     }
 
     public void addNumOfMaidenOvers() {
@@ -40,23 +42,16 @@ class CricketPlayer {
     }
 
     public void addBallsBowled() {
-        this.ballsBowled++;
+        ballsBowled++;
     }
 
     public void addRunsGiven(int runsGiven) {
-        this.runsGiven += runsGiven;
+        this.runsGiven+=runsGiven;
     }
 
-    public void setEconomy(double economy) {
-        this.economy = economy;
-    }
-
-    public void setStrike_rate(double strike_rate) {
-        this.strike_rate = strike_rate;
-    }
-
-    public CricketPlayer(String name, int jerseyNumber, int age) {
+    public CricketPlayer(String name, String team, int jerseyNumber, int age) {
         this.name = name;
+        this.team = team;
         this.jerseyNumber = jerseyNumber;
         this.age = age;
     }

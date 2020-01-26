@@ -1,4 +1,4 @@
-package com.example.CricketGameTrial.service;
+package com.example.CricketGameTrial.models;
 
 import java.util.ArrayList;
 
