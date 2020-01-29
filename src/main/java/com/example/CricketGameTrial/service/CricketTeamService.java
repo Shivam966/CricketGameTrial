@@ -1,40 +1,46 @@
 package com.example.CricketGameTrial.service;
 
-import com.example.CricketGameTrial.DAO.CricketTeamDAO;
-import com.example.CricketGameTrial.DAO.CricketTeamDAOImpl;
+import com.example.CricketGameTrial.DAO.CricketMatchDAO;
 import com.example.CricketGameTrial.models.CricketPlayer;
 import com.example.CricketGameTrial.models.CricketTeam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-public abstract class CricketTeamService {
-    private static CricketTeamDAO ct_dao = new CricketTeamDAOImpl();
+@Service
+public class CricketTeamService {
 
-    public static void addTeam(String name) {
-        ct_dao.saveTeam(new CricketTeam(name));
+    @Autowired
+    @Qualifier("com.example.CricketGameTrial.DAO.CricketMatchDAOImpl")
+    CricketMatchDAO cm_dao;
+
+    public void addTeam(CricketTeam team) {
+        cm_dao.saveTeam(team);
     }
 
-    public static void removeTeam(String name) {
-        ct_dao.deleteTeam(ct_dao.getAllTeams().get(name));
+    public void removeTeam(String name) {
+        cm_dao.deleteTeam(cm_dao.getAllTeams().get(name));
     }
 
-    public static Map<String, CricketTeam> getAllTeams() {
-        return ct_dao.getAllTeams();
+    public Map<String, CricketTeam> getAllTeams() {
+        return cm_dao.getAllTeams();
     }
 
-    public static CricketTeam getTeam(String name) {
-        return ct_dao.getTeam(name);
+    public CricketTeam getTeam(String name) {
+        return cm_dao.getTeam(name);
     }
 
-    public static void addPlayersToTeam(String name, int[] jerseyNumbers) {
-        ct_dao.addPlayersToTeam(name, jerseyNumbers);
+    public void addPlayersToTeam(String name, int[] jerseyNumbers) {
+        cm_dao.addPlayersToTeam(name, jerseyNumbers);
     }
 
-    public static CricketPlayer getPlayerFromTeam(String name,int index) {
-        return ct_dao.getPlayerFromTeam(name,index);
+    public CricketPlayer getPlayerFromTeam(String name,int index) {
+        return cm_dao.getPlayerFromTeam(name,index);
     }
 
-    public static void removePlayersFromTeam(String name, int[] jerseyNumbers) {
-        ct_dao.deletePlayersFromTeam(name, jerseyNumbers);
+    public void removePlayersFromTeam(String name, int[] jerseyNumbers) {
+        cm_dao.deletePlayersFromTeam(name, jerseyNumbers);
     }
 }

@@ -1,80 +1,78 @@
 package com.example.CricketGameTrial.service;
 
-import com.example.CricketGameTrial.models.CricketPlayer;
 import com.example.CricketGameTrial.models.Innings;
 import com.example.CricketGameTrial.models.Over;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-abstract class InningsService {
+@Service
+class InningsService {
 
-    static class PlayerWrapper{
-        CricketPlayer player;
+    @Autowired
+    OverService overs;
 
-        PlayerWrapper(CricketPlayer player) {
-            this.player = player;
-        }
-    }
+    @Autowired
+    CricketTeamService cricketTeamService;
+
+    @Autowired
+    CricketPlayerService cricketPlayerService;
 
     // start method takes number of overs to be played as an argument because innings can only start by mentioning
     // number of overs to be played in it and returns number of overs played by the batting team
-    public static void start(Innings innings, int numOfOvers) {
+    public void startInnings(Innings innings, int numOfOvers, int matchID) {
         // balls represents number of balls to be played
         int count = 0; // count is counter for while loop to check numOfOvers and ran will be used for random
         int index = 6;
-        innings.setBattingPlayer(innings.getBattingTeam().getPlayers().get(0));
-        innings.setNonStrikerBattingPlayer(innings.getBattingTeam().getPlayers().get(1));
-        innings.setBowlingPlayer(innings.getBowlingTeam().getPlayers().get(index));
+        int battingPlayer = cricketTeamService.getTeam(innings.getBattingTeam()).getPlayers().get(0);
+        int nonStrikerBattingPlayer = cricketTeamService.getTeam(innings.getBattingTeam()).getPlayers().get(1);
+        int bowlingPlayer = cricketTeamService.getTeam(innings.getBowlingTeam()).getPlayers().get(index);
 
         while(count<numOfOvers && innings.getWickets()<10) {
-            innings.getOvers().add(new Over());
-            int runsInOver = OverService.start(innings);
+            innings.getOvers().add(new Over(battingPlayer, nonStrikerBattingPlayer, bowlingPlayer));
 
-            if(innings.getOvers().get(innings.getOvers().size()-1).getBalls().size()==6 && runsInOver==0)
-                innings.getBowlingPlayer().addNumOfMaidenOvers();
+            int runsInOver = overs.startOver(innings,matchID);
+
+            if(innings.getOvers().get(innings.getOvers().size()-1).getBalls().size()==6 && runsInOver==0) {
+                cricketPlayerService.getPlayer(bowlingPlayer).getPlayerStats().get(matchID).addNumOfMaidenOvers();
+                cricketPlayerService.getPlayer(bowlingPlayer).addWholeNumOfMaidenOvers();
+            }
 
             if(index==10) index = 6;
             else index++;
-            innings.setBowlingPlayer(innings.getBowlingTeam().getPlayers().get(index));
+            bowlingPlayer = cricketTeamService.getTeam(innings.getBowlingTeam()).getPlayers().get(index);
 
-            PlayerWrapper pw1 = new PlayerWrapper(innings.getBattingPlayer()),
-                    pw2 = new PlayerWrapper(innings.getNonStrikerBattingPlayer());
-            swap(pw1,pw2);
-            innings.setBattingPlayer(pw1.player);
-            innings.setNonStrikerBattingPlayer(pw2.player);
+            int temp = battingPlayer;
+            battingPlayer = nonStrikerBattingPlayer;
+            nonStrikerBattingPlayer = temp;
             count++;
         }
     }
 
-    public static void start(Innings innings, int numOfOvers, int target) {
+    public void startInnings(Innings innings, int numOfOvers, int target, int matchID) {
         // balls represents number of balls to be played
         int count = 0; // count is counter for while loop to check numOfOvers and ran will be used for random
         int index = 6;
-        innings.setBattingPlayer(innings.getBattingTeam().getPlayers().get(0));
-        innings.setNonStrikerBattingPlayer(innings.getBattingTeam().getPlayers().get(1));
-        innings.setBowlingPlayer(innings.getBowlingTeam().getPlayers().get(index));
+        int battingPlayer = cricketTeamService.getTeam(innings.getBattingTeam()).getPlayers().get(0);
+        int nonStrikerBattingPlayer = cricketTeamService.getTeam(innings.getBattingTeam()).getPlayers().get(1);
+        int bowlingPlayer = cricketTeamService.getTeam(innings.getBowlingTeam()).getPlayers().get(index);
 
         while(count<numOfOvers && innings.getWickets()<10 && innings.getRuns()<=target) {
-            innings.getOvers().add(new Over());
-            int runsInOver = OverService.start(innings);
+            innings.getOvers().add(new Over(battingPlayer, nonStrikerBattingPlayer, bowlingPlayer));
+            int runsInOver = overs.startOver(innings, target, matchID);
 
-            if(innings.getOvers().get(innings.getOvers().size()-1).getBalls().size()==6 && runsInOver==0)
-                innings.getBowlingPlayer().addNumOfMaidenOvers();
+            if(innings.getOvers().get(innings.getOvers().size()-1).getBalls().size()==6 && runsInOver==0) {
+                cricketPlayerService.getPlayer(bowlingPlayer).getPlayerStats().get(matchID).addNumOfMaidenOvers();
+                cricketPlayerService.getPlayer(bowlingPlayer).addWholeNumOfMaidenOvers();
+            }
 
             if(index==10) index = 6;
             else index++;
-            innings.setBowlingPlayer(innings.getBowlingTeam().getPlayers().get(index));
+            bowlingPlayer = cricketTeamService.getTeam(innings.getBowlingTeam()).getPlayers().get(index);
 
-            PlayerWrapper pw1 = new PlayerWrapper(innings.getBattingPlayer()),
-                    pw2 = new PlayerWrapper(innings.getNonStrikerBattingPlayer());
-            swap(pw1,pw2);
-            innings.setBattingPlayer(pw1.player);
-            innings.setNonStrikerBattingPlayer(pw2.player);
+            int temp = battingPlayer;
+            battingPlayer = nonStrikerBattingPlayer;
+            nonStrikerBattingPlayer = temp;
             count++;
         }
-    }
-
-    static void swap(PlayerWrapper pw1, PlayerWrapper pw2) {
-        CricketPlayer temp = pw1.player;
-        pw1.player = pw2.player;
-        pw2.player = temp;
     }
 }

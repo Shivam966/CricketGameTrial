@@ -1,13 +1,10 @@
 package com.example.CricketGameTrial.models;
 
-import com.example.CricketGameTrial.models.CricketPlayer;
-import com.example.CricketGameTrial.models.CricketTeam;
-import com.example.CricketGameTrial.models.Over;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /* Innings class is kept abstract because it does not make sense to make instance of innings class, it's purpose is to
    impose protocol for its subclasses
@@ -20,10 +17,9 @@ import java.util.ArrayList;
 @Setter
 public class Innings {
 
-    private CricketTeam battingTeam, bowlingTeam;
-    private CricketPlayer battingPlayer, nonStrikerBattingPlayer, bowlingPlayer;
+    private String battingTeam, bowlingTeam;
     private int runs, wickets;
-    private ArrayList<Over> overs;
+    private List<Over> overs;
 
     public Innings() {
         overs = new ArrayList<>();

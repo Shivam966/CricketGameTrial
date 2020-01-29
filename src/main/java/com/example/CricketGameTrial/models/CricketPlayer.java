@@ -8,51 +8,54 @@ package com.example.CricketGameTrial.models;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @Setter
 public class CricketPlayer {
-    private final String name, team;
-    private final int jerseyNumber, age;
-    private int runsScored, ballsPlayed, ballsBowled, wicketsTaken, runsGiven;
-    private int numOfFours, numOfSixes, numOfMaidenOvers;
-    private float economy, strike_rate;
+    private final String playerName;
+    private final int jerseyNumber, playerAge;
+    private int playerRating, playerWholeEconomy, playerWholeStrike_rate;
+    private int wholeRunsScored, wholeBallsPlayed, wholeBallsBowled, wholeWicketsTaken, wholeRunsGiven;
+    private int wholeNumOfFours, wholeNumOfSixes, wholeNumOfMaidenOvers;
+    private Map<Integer, Stats> playerStats = new HashMap<>();
 
-    public void addRunsScored(int runs) {
-        runsScored+=runs;
+    public void addWholeRunsScored(int runs) {
+        wholeRunsScored+=runs;
     }
 
-    public void addWicketsTaken() {
-        wicketsTaken++;
+    public void addWholeWicketsTaken() {
+        wholeWicketsTaken++;
     }
 
-    public void addBallsPlayed() {
-        ballsPlayed++;
+    public void addWholeBallsPlayed() {
+        wholeBallsPlayed++;
     }
 
-    public void addNumOfFours() {
-        numOfFours++;
+    public void addWholeNumOfFours() {
+        wholeNumOfFours++;
     }
 
-    public void addNumOfSixes() {
-        numOfSixes++;
+    public void addWholeNumOfSixes() {
+        wholeNumOfSixes++;
     }
 
-    public void addNumOfMaidenOvers() {
-        numOfMaidenOvers++;
+    public void addWholeNumOfMaidenOvers() {
+        wholeNumOfMaidenOvers++;
     }
 
-    public void addBallsBowled() {
-        ballsBowled++;
+    public void addWholeBallsBowled() {
+        wholeBallsBowled++;
     }
 
-    public void addRunsGiven(int runsGiven) {
-        this.runsGiven+=runsGiven;
+    public void addWholeRunsGiven(int runsGiven) {
+        this.wholeRunsGiven+=runsGiven;
     }
 
-    public CricketPlayer(String name, String team, int jerseyNumber, int age) {
-        this.name = name;
-        this.team = team;
+    public CricketPlayer(String name, int jerseyNumber, int age) {
+        playerName = name;
         this.jerseyNumber = jerseyNumber;
-        this.age = age;
+        playerAge = age;
     }
 }

@@ -1,15 +1,31 @@
 package com.example.CricketGameTrial.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
+import java.util.List;
 
+@Getter
+@Setter
 public class Over {
-    private ArrayList<Character> balls = new ArrayList<>(); // Stores statistics of each ball
 
-    public ArrayList<Character> getBalls() {
-        return balls;
+    private final int bowlingPlayer;
+    @JsonIgnore
+    private int battingPlayer, nonStrikerBattingPlayer;
+
+    private List<Character> balls; // Stores statistics of each ball
+
+    public Over(int battingPlayer, int nonStrikerBattingPlayer, int bowlingPlayer) {
+        this.battingPlayer = battingPlayer;
+        this.nonStrikerBattingPlayer = nonStrikerBattingPlayer;
+        this.bowlingPlayer = bowlingPlayer;
+        this.balls = new ArrayList<>();
     }
 
-    public void addBalls(Character r) {
-        balls.add(r);
+
+    public List<Character> getBalls() {
+        return balls;
     }
 }

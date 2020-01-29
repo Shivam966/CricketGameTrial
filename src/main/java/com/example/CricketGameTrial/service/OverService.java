@@ -1,9 +1,16 @@
 package com.example.CricketGameTrial.service;
 
 import com.example.CricketGameTrial.models.Innings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-abstract class OverService {
-    public static int start(Innings innings) {
+@Service
+class OverService {
+
+    @Autowired
+    CricketPlayerService cricketPlayerService;
+
+    public int startOver(Innings innings, int matchID) {
         int ran;
         int runsInOver = 0;
         int c = 0;
@@ -11,19 +18,17 @@ abstract class OverService {
             ran = (int) (Math.random() * 8);
 
             // Here "7" is considered as wicket
-            innings.getBattingPlayer().addBallsPlayed();
-            innings.getBowlingPlayer().addBallsBowled();
+            cricketPlayerService.updateBallsToStats(innings,matchID);
             if (ran == 7) {
-                innings.setWickets(innings.getWickets()+1);
-                innings.setBattingPlayer(innings.getBattingTeam().getPlayers().get(innings.getWickets()));
-                innings.getBowlingPlayer().addWicketsTaken();
+                cricketPlayerService.doWhenRunIsSeven(innings,matchID);
             } else {
                 innings.setRuns(innings.getRuns()+ran);
                 runsInOver += ran;
-                innings.getBattingPlayer().addRunsScored(ran);
-                innings.getBowlingPlayer().addRunsGiven(ran);
-                if(ran==4) innings.getBattingPlayer().addNumOfFours();
-                if(ran==6) innings.getBattingPlayer().addNumOfSixes();
+
+                cricketPlayerService.updateRunsToStats(innings, matchID, ran);
+
+                if(ran==4) cricketPlayerService.doWhenRunIsFour(innings,matchID);
+                if(ran==6) cricketPlayerService.doWhenRunIsSix(innings,matchID);
             }
             if(ran<7) innings.getOvers().get(innings.getOvers().size()-1).getBalls().add(Character.forDigit(ran,
                     10));
@@ -33,7 +38,7 @@ abstract class OverService {
         return runsInOver;
     }
 
-    public static int start(Innings innings, int target) {
+    public int startOver(Innings innings, int target, int matchID) {
         int ran;
         int runsInOver = 0;
         int c = 0;
@@ -41,19 +46,17 @@ abstract class OverService {
             ran = (int) (Math.random() * 8);
 
             // Here "7" is considered as wicket
-            innings.getBattingPlayer().addBallsPlayed();
-            innings.getBowlingPlayer().addBallsBowled();
+            cricketPlayerService.updateBallsToStats(innings,matchID);
             if (ran == 7) {
-                innings.setWickets(innings.getWickets()+1);
-                innings.setBattingPlayer(innings.getBattingTeam().getPlayers().get(innings.getWickets()));
-                innings.getBowlingPlayer().addWicketsTaken();
+                cricketPlayerService.doWhenRunIsSeven(innings,matchID);
             } else {
                 innings.setRuns(innings.getRuns()+ran);
                 runsInOver += ran;
-                innings.getBattingPlayer().addRunsScored(ran);
-                innings.getBowlingPlayer().addRunsGiven(ran);
-                if(ran==4) innings.getBattingPlayer().addNumOfFours();
-                if(ran==6) innings.getBattingPlayer().addNumOfSixes();
+
+                cricketPlayerService.updateRunsToStats(innings,matchID,ran);
+
+                if(ran==4) cricketPlayerService.doWhenRunIsFour(innings,matchID);
+                if(ran==6) cricketPlayerService.doWhenRunIsSix(innings,matchID);
             }
             if(ran<7) innings.getOvers().get(innings.getOvers().size()-1).getBalls().add(Character.forDigit(ran,
                     10));
@@ -62,4 +65,6 @@ abstract class OverService {
         }
         return runsInOver;
     }
+
+
 }
