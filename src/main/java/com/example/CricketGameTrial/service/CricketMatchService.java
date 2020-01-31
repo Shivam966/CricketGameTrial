@@ -4,7 +4,6 @@ import com.example.CricketGameTrial.DAO.CricketMatchDAO;
 import com.example.CricketGameTrial.models.CricketMatch;
 import com.example.CricketGameTrial.models.Stats;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.Random;
 public class CricketMatchService {
 
     @Autowired
-    @Qualifier("com.example.CricketGameTrial.DAO.CricketMatchDAOImpl")
     CricketMatchDAO cm_dao;
 
     @Autowired
@@ -30,6 +28,8 @@ public class CricketMatchService {
         return cm_dao.getAllMatches();
     }
 
+    public CricketMatch getMatch(int matchID) {return cm_dao.getMatch(matchID);}
+
     public CricketMatch startMatch(CricketMatch match) {
         cm_dao.createMatch(match);
         doToss(match);
@@ -40,6 +40,8 @@ public class CricketMatchService {
 
         setEconomyAndStrikeRate(match.getTeamA(),match.getMatchID());
         setEconomyAndStrikeRate(match.getTeamB(),match.getMatchID());
+        setWholeEconomyAndStrikeRate(match.getTeamA());
+        setWholeEconomyAndStrikeRate(match.getTeamB());
 
         String result;
         if(match.getSecondInnings().getRuns() > match.getFirstInnings().getRuns()) {
@@ -71,7 +73,28 @@ public class CricketMatchService {
         }
     }
 
-    void setEconomyAndStrikeRate(String team, int matchID) {
+    void setWholeEconomyAndStrikeRate(String team) {
+        for(int i = 0;i < cricketTeamService.getTeam(team).getPlayers().size(); i++) {
+
+            if(cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
+                    .getWholeBallsBowled()!=0) cricketPlayerService.getPlayer(cricketTeamService.getTeam(team)
+                    .getPlayers().get(i)).setPlayerWholeEconomy(Math.round((float)
+                    cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
+                            .getWholeRunsGiven()/ cricketPlayerService
+                    .getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
+                    .getWholeBallsBowled()*600.0f)/100.0f);
+
+            if(cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
+                    .getWholeBallsPlayed()!=0) cricketPlayerService.getPlayer(cricketTeamService.getTeam(team)
+                    .getPlayers().get(i)).setPlayerWholeStrike_rate(Math.round((float)
+                    cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
+                            .getWholeRunsScored()/ cricketPlayerService
+                    .getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
+                    .getWholeBallsPlayed()*10000.0f)/100.0f);
+        }
+    }
+
+    void setEconomyAndStrikeRate(String team,int matchID) {
         for(int i = 0;i < cricketTeamService.getTeam(team).getPlayers().size(); i++) {
 
             if(cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i)).getPlayerStats()
@@ -93,8 +116,7 @@ public class CricketMatchService {
     }
 
     // toss method is used to simulate toss before actual match starts, it will decide randomly which team won the toss
-    // and what they have chosen first. In future functionality of asking the user what they wish to take first can be
-    // added.
+    // and what they have chosen first.
     void doToss(CricketMatch match) {
         Random r = new Random();
         // If "tossResult" is true, then team "a" won the toss and if result is false then team "b" won toss

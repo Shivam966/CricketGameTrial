@@ -15,7 +15,8 @@ class OverService {
         int runsInOver = 0;
         int c = 0;
         while(c < 6 && innings.getWickets()<10) {
-            ran = (int) (Math.random() * 8);
+            ran = generateRunsByRating(innings, cricketPlayerService.getPlayer(innings.getOvers().get(innings
+                    .getOvers().size()-1).getBattingPlayer()).getPlayerRating());
 
             // Here "7" is considered as wicket
             cricketPlayerService.updateBallsToStats(innings,matchID);
@@ -33,6 +34,7 @@ class OverService {
             if(ran<7) innings.getOvers().get(innings.getOvers().size()-1).getBalls().add(Character.forDigit(ran,
                     10));
             else innings.getOvers().get(innings.getOvers().size()-1).getBalls().add('W');
+            if(ran%2!=0) doWhenRunIsOdd(innings);
             c++;
         }
         return runsInOver;
@@ -43,7 +45,8 @@ class OverService {
         int runsInOver = 0;
         int c = 0;
         while(c < 6 && innings.getWickets()<10 && innings.getRuns()<=target) {
-            ran = (int) (Math.random() * 8);
+            ran = generateRunsByRating(innings, cricketPlayerService.getPlayer(innings.getOvers().get(innings
+                    .getOvers().size()-1).getBattingPlayer()).getPlayerRating());
 
             // Here "7" is considered as wicket
             cricketPlayerService.updateBallsToStats(innings,matchID);
@@ -61,10 +64,26 @@ class OverService {
             if(ran<7) innings.getOvers().get(innings.getOvers().size()-1).getBalls().add(Character.forDigit(ran,
                     10));
             else innings.getOvers().get(innings.getOvers().size()-1).getBalls().add('W');
+            if(ran%2!=0) doWhenRunIsOdd(innings);
             c++;
         }
         return runsInOver;
     }
 
+    int generateRunsByRating(Innings innings, int rating) {
+        int ran;
+        float probability = (float)Math.random();
+        if(probability > ((float)rating/100.0f)) ran = 7;
+        else {
+            ran = (int)(Math.random()*7);
+        }
+        return ran;
+    }
 
+    void doWhenRunIsOdd(Innings innings) {
+        int battingPlayer = innings.getOvers().get(innings.getOvers().size()-1).getBattingPlayer();
+        int nonStrikerBattingPlayer = innings.getOvers().get(innings.getOvers().size()-1).getNonStrikerBattingPlayer();
+        innings.getOvers().get(innings.getOvers().size()-1).setBattingPlayer(nonStrikerBattingPlayer);
+        innings.getOvers().get(innings.getOvers().size()-1).setNonStrikerBattingPlayer(battingPlayer);
+    }
 }

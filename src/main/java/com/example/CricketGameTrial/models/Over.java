@@ -24,7 +24,6 @@ public class Over {
         this.balls = new ArrayList<>();
     }
 
-
     public List<Character> getBalls() {
         return balls;
     }

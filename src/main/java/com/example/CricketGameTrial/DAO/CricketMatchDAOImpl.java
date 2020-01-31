@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@Component("com.example.CricketGameTrial.DAO.CricketMatchDAOImpl")
+@Component
 public class CricketMatchDAOImpl implements CricketMatchDAO {
 
     private Map<Integer, CricketMatch> matches;
-    private Map<Integer, CricketPlayer> players;
     private Map<String, CricketTeam> teams;
+    private Map<Integer, CricketPlayer> players;
 
     public CricketMatchDAOImpl() {
         matches = new HashMap<>();
@@ -49,16 +49,6 @@ public class CricketMatchDAOImpl implements CricketMatchDAO {
     }
 
     @Override
-    public void savePlayer(CricketPlayer player) {
-        players.put(player.getJerseyNumber(), player);
-    }
-
-    @Override
-    public void deletePlayer(CricketPlayer player) {
-        players.remove(player.getJerseyNumber());
-    }
-
-    @Override
     public Map<String, CricketTeam> getAllTeams() {
         return teams;
     }
@@ -69,10 +59,9 @@ public class CricketMatchDAOImpl implements CricketMatchDAO {
     }
 
     @Override
-    public void addPlayersToTeam(String name, int[] jerseyNumbers) {
-        for(int jerseyNumber:jerseyNumbers) {
-                teams.get(name).getPlayers().add(jerseyNumber);
-        }
+    public void addPlayersToTeam(String name, CricketPlayer player) {
+        players.put(player.getJerseyNumber(),player);
+        teams.get(name).getPlayers().add(player.getJerseyNumber());
     }
 
     @Override
@@ -84,7 +73,8 @@ public class CricketMatchDAOImpl implements CricketMatchDAO {
     @Override
     public void deletePlayersFromTeam(String name, int[] jerseyNumbers) {
         for(int jerseyNumber:jerseyNumbers) {
-            teams.get(name).getPlayers().remove(players.get(jerseyNumber));
+            teams.get(name).getPlayers().removeIf(num->num.equals(jerseyNumber));
+            players.remove(jerseyNumber);
         }
     }
 
@@ -94,8 +84,8 @@ public class CricketMatchDAOImpl implements CricketMatchDAO {
     }
 
     @Override
-    public void deleteTeam(CricketTeam team) {
-        teams.remove(team.getTeamName());
+    public void deleteTeam(String team) {
+        teams.remove(team);
     }
 
 }

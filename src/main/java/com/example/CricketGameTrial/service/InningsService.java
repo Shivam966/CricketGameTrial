@@ -18,9 +18,9 @@ class InningsService {
     CricketPlayerService cricketPlayerService;
 
     // start method takes number of overs to be played as an argument because innings can only start by mentioning
-    // number of overs to be played in it and returns number of overs played by the batting team
+    // number of overs to be played in it
     public void startInnings(Innings innings, int numOfOvers, int matchID) {
-        // balls represents number of balls to be played
+
         int count = 0; // count is counter for while loop to check numOfOvers and ran will be used for random
         int index = 6;
         int battingPlayer = cricketTeamService.getTeam(innings.getBattingTeam()).getPlayers().get(0);
@@ -49,7 +49,7 @@ class InningsService {
     }
 
     public void startInnings(Innings innings, int numOfOvers, int target, int matchID) {
-        // balls represents number of balls to be played
+
         int count = 0; // count is counter for while loop to check numOfOvers and ran will be used for random
         int index = 6;
         int battingPlayer = cricketTeamService.getTeam(innings.getBattingTeam()).getPlayers().get(0);

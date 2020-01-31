@@ -3,8 +3,9 @@ package com.example.CricketGameTrial.service;
 import com.example.CricketGameTrial.DAO.CricketMatchDAO;
 import com.example.CricketGameTrial.models.CricketPlayer;
 import com.example.CricketGameTrial.models.Innings;
+import com.example.CricketGameTrial.models.PlayerBattingScoreCard;
+import com.example.CricketGameTrial.models.PlayerBowlingScoreCard;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -13,26 +14,33 @@ import java.util.Map;
 public class CricketPlayerService {
 
     @Autowired
-    @Qualifier("com.example.CricketGameTrial.DAO.CricketMatchDAOImpl")
     CricketMatchDAO cm_dao;
 
     @Autowired
     CricketTeamService cricketTeamService;
 
-    public void addPlayer(CricketPlayer player) {
-        cm_dao.savePlayer(player);
-    }
-
     public Map<Integer, CricketPlayer> getAllPlayers() {
         return cm_dao.getAllPlayers();
     }
 
-    public void removePlayer(int jerseyNumber) {
-        cm_dao.deletePlayer(cm_dao.getPlayer(jerseyNumber));
-    }
-
     public CricketPlayer getPlayer(int jerseyNumber) {
         return cm_dao.getPlayer(jerseyNumber);
+    }
+
+    public PlayerBattingScoreCard getPlayerWholeBattingStats(int jerseyNumber) {
+        return new PlayerBattingScoreCard(cm_dao.getPlayer(jerseyNumber));
+    }
+
+    public PlayerBattingScoreCard getPlayerBattingStats(int jerseyNumber, int matchID) {
+        return new PlayerBattingScoreCard(cm_dao.getPlayer(jerseyNumber),matchID);
+    }
+
+    public PlayerBowlingScoreCard getPlayerWholeBowlingStats(int jerseyNumber) {
+        return new PlayerBowlingScoreCard(cm_dao.getPlayer(jerseyNumber));
+    }
+
+    public PlayerBowlingScoreCard getPlayerBowlingStats(int jerseyNumber, int matchID) {
+        return new PlayerBowlingScoreCard(cm_dao.getPlayer(jerseyNumber),matchID);
     }
 
     public void updateRunsToStats(Innings innings, int matchID, int ran) {
