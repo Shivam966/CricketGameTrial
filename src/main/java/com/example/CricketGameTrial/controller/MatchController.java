@@ -5,6 +5,7 @@ import com.example.CricketGameTrial.service.CricketMatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -21,7 +22,7 @@ public class MatchController {
     }
 
     @GetMapping("/AllMatches")
-    public Map<Integer, CricketMatch> getAllMatches() {
+    public List<CricketMatch> getAllMatches() {
         return cricketMatchService.getAllMatches();
     }
 

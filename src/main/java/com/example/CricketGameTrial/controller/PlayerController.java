@@ -7,6 +7,7 @@ import com.example.CricketGameTrial.service.CricketPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,7 +17,7 @@ public class PlayerController {
     CricketPlayerService cricketPlayerService;
 
     @GetMapping("/AllPlayers")
-    public Map<Integer, CricketPlayer> getAllPlayers() {
+    public List<CricketPlayer> getAllPlayers() {
         return cricketPlayerService.getAllPlayers();
     }
 

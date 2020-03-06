@@ -1,10 +1,15 @@
 package com.example.CricketGameTrial.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@Document(indexName = "cricketmatches", shards = 1, replicas = 0)
 public class CricketMatch {
     /*
     Match will have matchID that will be unique for each match.
@@ -13,21 +18,13 @@ public class CricketMatch {
     In the same way it will have 2 innings-first and second, 1 numOfOvers variable to determine how many overs each
     inning will play and 1 tossWinningTeam variable that will store the toss winning team.
     */
+    @Id
     private int matchID;
     private int numOfOvers;
     private String tossWinningTeam;
     private String choseTo;
     private String teamA,teamB;
-    private Innings firstInnings;
-    private Innings secondInnings;
+    private Innings firstInnings = new Innings();
+    private Innings secondInnings = new Innings();
     private String result;
-
-    public CricketMatch(int numOfOvers, String team1, String team2) {
-        matchID = this.hashCode();
-        this.numOfOvers = numOfOvers;
-        firstInnings = new Innings();
-        secondInnings = new Innings();
-        teamA = team1;
-        teamB = team2;
-    }
 }

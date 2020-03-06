@@ -4,19 +4,26 @@ package com.example.CricketGameTrial.models;
 // Right now basic details have been added, other variables like height, weight can be added if needed
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@Document(indexName = "cricketplayers", shards = 1, replicas = 0)
 public class CricketPlayer {
     enum type {
         BATSMAN, BOWLER, ALLROUNDER
     }
-    private final String playerName;
-    private final int jerseyNumber, playerAge;
+    private String playerName;
+    @Id
+    private int jerseyNumber;
+    private int playerAge;
     private int playerRating;  // playerRating will be out of 100
     type playerType;
     private float playerWholeEconomy, playerWholeStrike_rate;
@@ -56,10 +63,10 @@ public class CricketPlayer {
         this.wholeRunsGiven+=runsGiven;
     }
 
-    public CricketPlayer(String name, int jerseyNumber, int age, int playerRating) {
-        playerName = name;
-        this.jerseyNumber = jerseyNumber;
-        playerAge = age;
-        this.playerRating = playerRating;
-    }
+//    public CricketPlayer(String name, int jerseyNumber, int age, int playerRating) {
+//        playerName = name;
+//        this.jerseyNumber = jerseyNumber;
+//        playerAge = age;
+//        this.playerRating = playerRating;
+//    }
 }

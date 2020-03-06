@@ -6,6 +6,7 @@ import com.example.CricketGameTrial.service.CricketTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,7 +36,7 @@ public class TeamController {
     }
 
     @GetMapping("/AllTeams")
-    public Map<String, CricketTeam> getAllTeams() {
+    public List<CricketTeam> getAllTeams() {
         return cricketTeamService.getAllTeams();
     }
 

@@ -1,44 +1,56 @@
 package com.example.CricketGameTrial.service;
 
-import com.example.CricketGameTrial.DAO.CricketMatchDAO;
+import com.example.CricketGameTrial.DAO.CricketMatchRepository;
+import com.example.CricketGameTrial.DAO.CricketPlayerRepository;
+import com.example.CricketGameTrial.DAO.CricketTeamRepository;
 import com.example.CricketGameTrial.models.CricketPlayer;
 import com.example.CricketGameTrial.models.CricketTeam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class CricketTeamService {
 
     @Autowired
-    CricketMatchDAO cm_dao;
+    CricketTeamRepository ct_dao;
+
+    @Autowired
+    CricketPlayerRepository cp_dao;
 
     public void addTeam(CricketTeam team) {
-        cm_dao.saveTeam(team);
+        ct_dao.save(team);
     }
 
     public void removeTeam(String name) {
-        cm_dao.deleteTeam(name);
+        ct_dao.deleteById(name);
     }
 
-    public Map<String, CricketTeam> getAllTeams() {
-        return cm_dao.getAllTeams();
+    public List<CricketTeam> getAllTeams() {
+        return ct_dao.findAll();
     }
 
     public CricketTeam getTeam(String name) {
-        return cm_dao.getTeam(name);
+        return ct_dao.findById(name).get();
     }
 
     public void addPlayersToTeam(String name, CricketPlayer player) {
-        cm_dao.addPlayersToTeam(name, player);
+        ct_dao.findById(name).get().getPlayers().add(player.getJerseyNumber());
+        ct_dao.save(ct_dao.findById(name).get());
+        cp_dao.save(player);
     }
 
     public CricketPlayer getPlayerFromTeam(String name,int index) {
-        return cm_dao.getPlayerFromTeam(name,index);
+        int playerJerseyNumber = ct_dao.findById(name).get().getPlayers().get(index);
+        return cp_dao.findById(playerJerseyNumber).get();
     }
 
     public void removePlayersFromTeam(String name, int[] jerseyNumbers) {
-        cm_dao.deletePlayersFromTeam(name, jerseyNumbers);
+        for(int i=0;i<jerseyNumbers.length;i++) {
+            ct_dao.findById(name).get().getPlayers().remove(jerseyNumbers[i]);
+            cp_dao.deleteById(jerseyNumbers[i]);
+        }
     }
 }

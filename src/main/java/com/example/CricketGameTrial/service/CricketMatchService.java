@@ -1,11 +1,12 @@
 package com.example.CricketGameTrial.service;
 
-import com.example.CricketGameTrial.DAO.CricketMatchDAO;
+import com.example.CricketGameTrial.DAO.CricketMatchRepository;
 import com.example.CricketGameTrial.models.CricketMatch;
 import com.example.CricketGameTrial.models.Stats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -13,7 +14,7 @@ import java.util.Random;
 public class CricketMatchService {
 
     @Autowired
-    CricketMatchDAO cm_dao;
+    CricketMatchRepository cm_dao;
 
     @Autowired
     InningsService innings;
@@ -24,14 +25,14 @@ public class CricketMatchService {
     @Autowired
     CricketPlayerService cricketPlayerService;
 
-    public Map<Integer, CricketMatch> getAllMatches() {
-        return cm_dao.getAllMatches();
+    public List<CricketMatch> getAllMatches() {
+        return cm_dao.findAll();
     }
 
-    public CricketMatch getMatch(int matchID) {return cm_dao.getMatch(matchID);}
+    public CricketMatch getMatch(int matchID) {return cm_dao.findById(matchID).get();}
 
     public CricketMatch startMatch(CricketMatch match) {
-        cm_dao.createMatch(match);
+        cm_dao.save(match);
         doToss(match);
         addMatchIDToPlayers(match.getTeamA(),match.getTeamB(), match.getMatchID());
         innings.startInnings(match.getFirstInnings(),match.getNumOfOvers(),match.getMatchID());

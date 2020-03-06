@@ -6,8 +6,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class PlayerBattingScoreCard {
-    private final String playerName;
-    private final int jerseyNumber, playerAge;
+    private String playerName;
+    private int jerseyNumber, playerAge;
     private int playerRating;
     CricketPlayer.type playerType;
     private float playerStrike_rate;
