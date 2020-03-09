@@ -1,7 +1,6 @@
 package com.example.CricketGameTrial.service;
 
-import com.example.CricketGameTrial.DAO.CricketMatchRepository;
-import com.example.CricketGameTrial.DAO.CricketPlayerRepository;
+import com.example.CricketGameTrial.DAO.CricketTeamRepository;
 import com.example.CricketGameTrial.models.CricketPlayer;
 import com.example.CricketGameTrial.models.Innings;
 import com.example.CricketGameTrial.models.PlayerBattingScoreCard;
@@ -9,85 +8,64 @@ import com.example.CricketGameTrial.models.PlayerBowlingScoreCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 @Service
 public class CricketPlayerService {
 
     @Autowired
-    CricketPlayerRepository cp_dao;
+    CricketTeamRepository ct_dao;
 
-    @Autowired
-    CricketTeamService cricketTeamService;
-
-    public List<CricketPlayer> getAllPlayers() {
-        return cp_dao.findAll();
+    public Collection<CricketPlayer> getAllPlayersFromTeam(String teamName) {
+        return ct_dao.findById(teamName).get().getPlayers().values();
     }
 
-    public CricketPlayer getPlayer(int jerseyNumber) {
-        return cp_dao.findById(jerseyNumber).get();
+    public CricketPlayer getPlayerFromTeam(String teamName, int jerseyNumber) {
+        return ct_dao.findById(teamName).get().getPlayers().get(jerseyNumber);
     }
 
-    public PlayerBattingScoreCard getPlayerWholeBattingStats(int jerseyNumber) {
-        return new PlayerBattingScoreCard(cp_dao.findById(jerseyNumber).get());
+    public PlayerBattingScoreCard getPlayerWholeBattingStatsFromTeam(String teamName, int jerseyNumber) {
+        return new PlayerBattingScoreCard(ct_dao.findById(teamName).get().getPlayers().get(jerseyNumber));
     }
 
-    public PlayerBattingScoreCard getPlayerBattingStats(int jerseyNumber, int matchID) {
-        return new PlayerBattingScoreCard(cp_dao.findById(jerseyNumber).get(),matchID);
+    public PlayerBattingScoreCard getPlayerBattingStatsFromTeam(String teamName, int jerseyNumber, int matchID) {
+        return new PlayerBattingScoreCard(ct_dao.findById(teamName).get().getPlayers().get(jerseyNumber),matchID);
     }
 
-    public PlayerBowlingScoreCard getPlayerWholeBowlingStats(int jerseyNumber) {
-        return new PlayerBowlingScoreCard(cp_dao.findById(jerseyNumber).get());
+    public PlayerBowlingScoreCard getPlayerWholeBowlingStatsFromTeam(String teamName, int jerseyNumber) {
+        return new PlayerBowlingScoreCard(ct_dao.findById(teamName).get().getPlayers().get(jerseyNumber));
     }
 
-    public PlayerBowlingScoreCard getPlayerBowlingStats(int jerseyNumber, int matchID) {
-        return new PlayerBowlingScoreCard(cp_dao.findById(jerseyNumber).get(),matchID);
+    public PlayerBowlingScoreCard getPlayerBowlingStatsFromTeam(String teamName, int jerseyNumber, int matchID) {
+        return new PlayerBowlingScoreCard(ct_dao.findById(teamName).get().getPlayers().get(jerseyNumber),matchID);
     }
 
-    public void updateRunsToStats(Innings innings, int matchID, int ran) {
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBattingPlayer()).get()
-                .getPlayerStats().get(matchID).addRunsScored(ran);
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBattingPlayer()).get()
-                .addWholeRunsScored(ran);
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBowlingPlayer()).get()
-                .getPlayerStats().get(matchID).addRunsGiven(ran);
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBowlingPlayer()).get()
-                .addWholeRunsGiven(ran);
+    public void updateRunsToStats(CricketPlayer battingPlayer, CricketPlayer bowlingPlayer, int matchID, int ran) {
+        battingPlayer.getPlayerStats().get(matchID).addRunsScored(ran);
+        battingPlayer.addWholeRunsScored(ran);
+        bowlingPlayer.getPlayerStats().get(matchID).addRunsGiven(ran);
+        bowlingPlayer.addWholeRunsGiven(ran);
     }
 
-    public void updateBallsToStats(Innings innings, int matchID) {
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBattingPlayer()).get()
-                .getPlayerStats().get(matchID).addBallsPlayed();
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBattingPlayer()).get()
-                .addWholeBallsPlayed();
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBowlingPlayer()).get()
-                .getPlayerStats().get(matchID).addBallsBowled();
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBowlingPlayer()).get()
-                .addWholeBallsBowled();
+    public void updateBallsToStats(CricketPlayer battingPlayer, CricketPlayer bowlingPlayer, int matchID) {
+        battingPlayer.getPlayerStats().get(matchID).addBallsPlayed();
+        battingPlayer.addWholeBallsPlayed();
+        bowlingPlayer.getPlayerStats().get(matchID).addBallsBowled();
+        bowlingPlayer.addWholeBallsBowled();
     }
 
-    public void doWhenRunIsSeven(Innings innings, int matchID) {
-        innings.setWickets(innings.getWickets()+1);
-        innings.getOvers().get(innings.getOvers().size()-1).setBattingPlayer(cricketTeamService.getTeam(innings
-                .getBattingTeam()).getPlayers().get(innings.getWickets()));
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBowlingPlayer()).get()
-                .getPlayerStats().get(matchID).addWicketsTaken();
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBowlingPlayer()).get()
-                .addWholeWicketsTaken();
+    public void doWhenRunIsSeven(CricketPlayer bowlingPlayer, int matchID) {
+        bowlingPlayer.getPlayerStats().get(matchID).addWicketsTaken();
+        bowlingPlayer.addWholeWicketsTaken();
     }
 
-    void doWhenRunIsFour(Innings innings, int matchID) {
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1)
-                .getBattingPlayer()).get().getPlayerStats().get(matchID).addNumOfFours();
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBattingPlayer()).get()
-                .addWholeNumOfFours();
+    void doWhenRunIsFour(CricketPlayer battingPlayer, int matchID) {
+        battingPlayer.getPlayerStats().get(matchID).addNumOfFours();
+        battingPlayer.addWholeNumOfFours();
     }
 
-    void doWhenRunIsSix(Innings innings, int matchID) {
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1)
-                .getBattingPlayer()).get().getPlayerStats().get(matchID).addNumOfSixes();
-        cp_dao.findById(innings.getOvers().get(innings.getOvers().size()-1).getBattingPlayer()).get()
-                .addWholeNumOfSixes();
+    void doWhenRunIsSix(CricketPlayer battingPlayer, int matchID) {
+        battingPlayer.getPlayerStats().get(matchID).addNumOfSixes();
+        battingPlayer.addWholeNumOfSixes();
     }
 }

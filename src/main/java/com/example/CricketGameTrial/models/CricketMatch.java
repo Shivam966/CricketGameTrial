@@ -9,7 +9,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Getter
 @Setter
 @NoArgsConstructor
-@Document(indexName = "cricketmatches", shards = 1, replicas = 0)
+@Document(indexName = "cricketmatches")
 public class CricketMatch {
     /*
     Match will have matchID that will be unique for each match.

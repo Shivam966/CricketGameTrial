@@ -7,6 +7,7 @@ import com.example.CricketGameTrial.service.CricketPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -16,33 +17,37 @@ public class PlayerController {
     @Autowired
     CricketPlayerService cricketPlayerService;
 
-    @GetMapping("/AllPlayers")
-    public List<CricketPlayer> getAllPlayers() {
-        return cricketPlayerService.getAllPlayers();
+    @GetMapping("/{teamName}/AllPlayers")
+    public Collection<CricketPlayer> getAllPlayersFromTeam(@PathVariable String teamName) {
+        return cricketPlayerService.getAllPlayersFromTeam(teamName);
     }
 
-    @GetMapping("/Player/{jerseyNumber}")
-    public CricketPlayer getPlayer(@PathVariable int jerseyNumber) {
-        return cricketPlayerService.getPlayer(jerseyNumber);
+    @GetMapping("/{teamName}/Player/{jerseyNumber}")
+    public CricketPlayer getPlayerFromTeam(@PathVariable String teamName,@PathVariable int jerseyNumber) {
+        return cricketPlayerService.getPlayerFromTeam(teamName, jerseyNumber);
     }
 
-    @GetMapping("/PlayerWholeBattingStats/{jerseyNumber}")
-    public PlayerBattingScoreCard getPlayerWholeBattingStats(@PathVariable int jerseyNumber) {
-        return cricketPlayerService.getPlayerWholeBattingStats(jerseyNumber);
+    @GetMapping("/{teamName}/PlayerWholeBattingStats/{jerseyNumber}")
+    public PlayerBattingScoreCard getPlayerWholeBattingStats(@PathVariable String teamName,
+                                                             @PathVariable int jerseyNumber) {
+        return cricketPlayerService.getPlayerWholeBattingStatsFromTeam(teamName, jerseyNumber);
     }
 
-    @GetMapping("/PlayerWholeBowlingStats/{jerseyNumber}")
-    public PlayerBowlingScoreCard getPlayerWholeBowlingStats(@PathVariable int jerseyNumber) {
-        return cricketPlayerService.getPlayerWholeBowlingStats(jerseyNumber);
+    @GetMapping("/{teamName}/PlayerWholeBowlingStats/{jerseyNumber}")
+    public PlayerBowlingScoreCard getPlayerWholeBowlingStats(@PathVariable String teamName,
+                                                             @PathVariable int jerseyNumber) {
+        return cricketPlayerService.getPlayerWholeBowlingStatsFromTeam(teamName, jerseyNumber);
     }
 
-    @GetMapping("/PlayerBattingStats/{jerseyNumber}/{matchID}")
-    public PlayerBattingScoreCard getPlayerBattingStats(@PathVariable int jerseyNumber, @PathVariable int matchID) {
-        return cricketPlayerService.getPlayerBattingStats(jerseyNumber, matchID);
+    @GetMapping("/{teamName}/PlayerBattingStats/{jerseyNumber}/{matchID}")
+    public PlayerBattingScoreCard getPlayerBattingStats(@PathVariable String teamName, @PathVariable int jerseyNumber,
+                                                        @PathVariable int matchID) {
+        return cricketPlayerService.getPlayerBattingStatsFromTeam(teamName, jerseyNumber, matchID);
     }
 
-    @GetMapping("/PlayerBowlingStats/{jerseyNumber}/{matchID}")
-    public PlayerBowlingScoreCard getPlayerBowlingStats(@PathVariable int jerseyNumber, @PathVariable int matchID) {
-        return cricketPlayerService.getPlayerBowlingStats(jerseyNumber,matchID);
+    @GetMapping("/{teamName}/PlayerBowlingStats/{jerseyNumber}/{matchID}")
+    public PlayerBowlingScoreCard getPlayerBowlingStats(@PathVariable String teamName, @PathVariable int jerseyNumber,
+                                                        @PathVariable int matchID) {
+        return cricketPlayerService.getPlayerBowlingStatsFromTeam(teamName, jerseyNumber,matchID);
     }
 }

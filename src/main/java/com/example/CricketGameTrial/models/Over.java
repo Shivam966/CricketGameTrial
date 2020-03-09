@@ -15,7 +15,7 @@ public class Over {
     @JsonIgnore
     private int battingPlayer, nonStrikerBattingPlayer;
 
-    private List<Character> balls; // Stores statistics of each ball
+    private List<Character> balls;
 
     public Over(int battingPlayer, int nonStrikerBattingPlayer, int bowlingPlayer) {
         this.battingPlayer = battingPlayer;

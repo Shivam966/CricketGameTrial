@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,20 +17,19 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
-@Document(indexName = "cricketplayers", shards = 1, replicas = 0)
 public class CricketPlayer {
     enum type {
         BATSMAN, BOWLER, ALLROUNDER
     }
     private String playerName;
-    @Id
     private int jerseyNumber;
     private int playerAge;
-    private int playerRating;  // playerRating will be out of 100
+    private int playerRating;
     type playerType;
     private float playerWholeEconomy, playerWholeStrike_rate;
     private int wholeRunsScored, wholeBallsPlayed, wholeBallsBowled, wholeWicketsTaken, wholeRunsGiven;
     private int wholeNumOfFours, wholeNumOfSixes, wholeNumOfMaidenOvers;
+    @Field(type = FieldType.Nested)
     private Map<Integer, Stats> playerStats = new HashMap<>();
 
     public void addWholeRunsScored(int runs) {

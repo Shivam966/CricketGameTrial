@@ -2,12 +2,13 @@ package com.example.CricketGameTrial.service;
 
 import com.example.CricketGameTrial.DAO.CricketMatchRepository;
 import com.example.CricketGameTrial.models.CricketMatch;
+import com.example.CricketGameTrial.models.CricketPlayer;
+import com.example.CricketGameTrial.models.CricketTeam;
 import com.example.CricketGameTrial.models.Stats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -32,12 +33,11 @@ public class CricketMatchService {
     public CricketMatch getMatch(int matchID) {return cm_dao.findById(matchID).get();}
 
     public CricketMatch startMatch(CricketMatch match) {
-        cm_dao.save(match);
         doToss(match);
-        addMatchIDToPlayers(match.getTeamA(),match.getTeamB(), match.getMatchID());
-        innings.startInnings(match.getFirstInnings(),match.getNumOfOvers(),match.getMatchID());
-        innings.startInnings(match.getSecondInnings(),match.getNumOfOvers(),match.getFirstInnings().getRuns()
-                ,match.getMatchID());
+        addMatchIDToPlayers(match.getTeamA(), match.getMatchID());
+        addMatchIDToPlayers(match.getTeamB(), match.getMatchID());
+        innings.startInnings(match, true);
+        innings.startInnings(match, false);
 
         setEconomyAndStrikeRate(match.getTeamA(),match.getMatchID());
         setEconomyAndStrikeRate(match.getTeamB(),match.getMatchID());
@@ -60,64 +60,49 @@ public class CricketMatchService {
         }
         else result = "Match is tied!";
         match.setResult(result);
+        cm_dao.save(match);
         return match;
     }
 
-    void addMatchIDToPlayers(String team1, String team2, int matchID) {
-        for(int i=0;i< cricketTeamService.getTeam(team1).getPlayers().size();i++) {
-            cricketPlayerService.getPlayer(cricketTeamService.getTeam(team1).getPlayers().get(i)).getPlayerStats()
-                    .put(matchID, new Stats());
+    void addMatchIDToPlayers(String team, int matchID) {
+        CricketTeam tempTeam = cricketTeamService.getTeam(team);
+        for(CricketPlayer player : tempTeam.getPlayers().values()) {
+            player.getPlayerStats().put(matchID, new Stats());
+            tempTeam.getPlayers().put(player.getJerseyNumber(), player);
         }
-        for(int i=0;i < cricketTeamService.getTeam(team2).getPlayers().size();i++) {
-            cricketPlayerService.getPlayer(cricketTeamService.getTeam(team2).getPlayers().get(i)).getPlayerStats()
-                    .put(matchID, new Stats());
-        }
+        cricketTeamService.addTeam(tempTeam);
     }
 
     void setWholeEconomyAndStrikeRate(String team) {
-        for(int i = 0;i < cricketTeamService.getTeam(team).getPlayers().size(); i++) {
+        CricketTeam tempTeam = cricketTeamService.getTeam(team);
+        for(CricketPlayer player : tempTeam.getPlayers().values()) {
 
-            if(cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
-                    .getWholeBallsBowled()!=0) cricketPlayerService.getPlayer(cricketTeamService.getTeam(team)
-                    .getPlayers().get(i)).setPlayerWholeEconomy(Math.round((float)
-                    cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
-                            .getWholeRunsGiven()/ cricketPlayerService
-                    .getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
-                    .getWholeBallsBowled()*600.0f)/100.0f);
+            if(player.getWholeBallsBowled()!=0) player.setPlayerWholeEconomy(Math.round((float)
+                    player.getWholeRunsGiven()/ player.getWholeBallsBowled()*600.0f)/100.0f);
 
-            if(cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
-                    .getWholeBallsPlayed()!=0) cricketPlayerService.getPlayer(cricketTeamService.getTeam(team)
-                    .getPlayers().get(i)).setPlayerWholeStrike_rate(Math.round((float)
-                    cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
-                            .getWholeRunsScored()/ cricketPlayerService
-                    .getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
-                    .getWholeBallsPlayed()*10000.0f)/100.0f);
+            if(player.getWholeBallsPlayed()!=0) player.setPlayerWholeStrike_rate(Math.round((float)
+                    player.getWholeRunsScored()/ player.getWholeBallsPlayed()*10000.0f)/100.0f);
         }
+        cricketTeamService.addTeam(tempTeam);
     }
 
     void setEconomyAndStrikeRate(String team,int matchID) {
-        for(int i = 0;i < cricketTeamService.getTeam(team).getPlayers().size(); i++) {
+        CricketTeam tempTeam = cricketTeamService.getTeam(team);
+        for(CricketPlayer player : tempTeam.getPlayers().values()) {
 
-            if(cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i)).getPlayerStats()
-                    .get(matchID).getBallsBowled()!=0) cricketPlayerService.getPlayer(cricketTeamService.getTeam(team)
-                    .getPlayers().get(i)).getPlayerStats().get(matchID).setPlayerEconomy(Math.round((float)
-                    cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
-                            .getPlayerStats().get(matchID).getRunsGiven()/ cricketPlayerService
-                    .getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i)).getPlayerStats().get(matchID)
+            if(player.getPlayerStats().get(matchID).getBallsBowled()!=0) player.getPlayerStats().get(matchID)
+                    .setPlayerEconomy(Math.round((float)
+                    player.getPlayerStats().get(matchID).getRunsGiven()/ player.getPlayerStats().get(matchID)
                     .getBallsBowled()*600.0f)/100.0f);
 
-            if(cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i)).getPlayerStats()
-                    .get(matchID).getBallsPlayed()!=0) cricketPlayerService.getPlayer(cricketTeamService.getTeam(team)
-                    .getPlayers().get(i)).getPlayerStats().get(matchID).setPlayerStrike_rate(Math.round((float)
-                    cricketPlayerService.getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i))
-                            .getPlayerStats().get(matchID).getRunsScored()/ cricketPlayerService
-                    .getPlayer(cricketTeamService.getTeam(team).getPlayers().get(i)).getPlayerStats().get(matchID)
+            if(player.getPlayerStats().get(matchID).getBallsPlayed()!=0) player.getPlayerStats().get(matchID)
+                    .setPlayerStrike_rate(Math.round((float)
+                    player.getPlayerStats().get(matchID).getRunsScored()/player.getPlayerStats().get(matchID)
                     .getBallsPlayed()*10000.0f)/100.0f);
         }
+        cricketTeamService.addTeam(tempTeam);
     }
 
-    // toss method is used to simulate toss before actual match starts, it will decide randomly which team won the toss
-    // and what they have chosen first.
     void doToss(CricketMatch match) {
         Random r = new Random();
         // If "tossResult" is true, then team "a" won the toss and if result is false then team "b" won toss
